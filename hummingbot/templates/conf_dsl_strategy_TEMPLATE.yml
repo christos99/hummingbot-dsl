@@ -1,0 +1,5 @@
+strategy: cross_exchange_market_making
+primary_market: binance
+secondary_market: kucoin
+primary_market_symbol: ETHUSDT
+secondary_market_symbol: ETHUSDT
