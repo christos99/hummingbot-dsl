@@ -1,0 +1,392 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    BALANCE
+    COMMA
+    CROSSOVER
+    EMA
+    RSI
+    SMA
+
+Grammar
+
+Rule 0     S' -> strategy
+Rule 1     strategy -> buy_strategy
+Rule 2     strategy -> sell_strategy
+Rule 3     strategy -> conditional_strategy
+Rule 4     buy_strategy -> BUY IF simple_condition
+Rule 5     sell_strategy -> SELL IF simple_condition
+Rule 6     conditional_strategy -> IF compound_condition
+Rule 7     compound_condition -> simple_condition AND simple_condition
+Rule 8     compound_condition -> simple_condition OR simple_condition
+Rule 9     compound_condition -> NOT simple_condition
+Rule 10    compound_condition -> LPAREN compound_condition RPAREN
+Rule 11    simple_condition -> PRICE comparison NUMBER
+Rule 12    simple_condition -> VOLUME comparison NUMBER
+Rule 13    comparison -> LT
+Rule 14    comparison -> GT
+Rule 15    comparison -> LE
+Rule 16    comparison -> GE
+Rule 17    comparison -> EQ
+
+Terminals, with rules where they appear
+
+AND                  : 7
+BALANCE              : 
+BUY                  : 4
+COMMA                : 
+CROSSOVER            : 
+EMA                  : 
+EQ                   : 17
+GE                   : 16
+GT                   : 14
+IF                   : 4 5 6
+LE                   : 15
+LPAREN               : 10
+LT                   : 13
+NOT                  : 9
+NUMBER               : 11 12
+OR                   : 8
+PRICE                : 11
+RPAREN               : 10
+RSI                  : 
+SELL                 : 5
+SMA                  : 
+VOLUME               : 12
+error                : 
+
+Nonterminals, with rules where they appear
+
+buy_strategy         : 1
+comparison           : 11 12
+compound_condition   : 6 10
+conditional_strategy : 3
+sell_strategy        : 2
+simple_condition     : 4 5 7 7 8 8 9
+strategy             : 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . strategy
+    (1) strategy -> . buy_strategy
+    (2) strategy -> . sell_strategy
+    (3) strategy -> . conditional_strategy
+    (4) buy_strategy -> . BUY IF simple_condition
+    (5) sell_strategy -> . SELL IF simple_condition
+    (6) conditional_strategy -> . IF compound_condition
+
+    BUY             shift and go to state 5
+    SELL            shift and go to state 7
+    IF              shift and go to state 6
+
+    strategy                       shift and go to state 1
+    buy_strategy                   shift and go to state 2
+    sell_strategy                  shift and go to state 3
+    conditional_strategy           shift and go to state 4
+
+state 1
+
+    (0) S' -> strategy .
+
+
+
+state 2
+
+    (1) strategy -> buy_strategy .
+
+    $end            reduce using rule 1 (strategy -> buy_strategy .)
+
+
+state 3
+
+    (2) strategy -> sell_strategy .
+
+    $end            reduce using rule 2 (strategy -> sell_strategy .)
+
+
+state 4
+
+    (3) strategy -> conditional_strategy .
+
+    $end            reduce using rule 3 (strategy -> conditional_strategy .)
+
+
+state 5
+
+    (4) buy_strategy -> BUY . IF simple_condition
+
+    IF              shift and go to state 8
+
+
+state 6
+
+    (6) conditional_strategy -> IF . compound_condition
+    (7) compound_condition -> . simple_condition AND simple_condition
+    (8) compound_condition -> . simple_condition OR simple_condition
+    (9) compound_condition -> . NOT simple_condition
+    (10) compound_condition -> . LPAREN compound_condition RPAREN
+    (11) simple_condition -> . PRICE comparison NUMBER
+    (12) simple_condition -> . VOLUME comparison NUMBER
+
+    NOT             shift and go to state 11
+    LPAREN          shift and go to state 12
+    PRICE           shift and go to state 13
+    VOLUME          shift and go to state 14
+
+    compound_condition             shift and go to state 9
+    simple_condition               shift and go to state 10
+
+state 7
+
+    (5) sell_strategy -> SELL . IF simple_condition
+
+    IF              shift and go to state 15
+
+
+state 8
+
+    (4) buy_strategy -> BUY IF . simple_condition
+    (11) simple_condition -> . PRICE comparison NUMBER
+    (12) simple_condition -> . VOLUME comparison NUMBER
+
+    PRICE           shift and go to state 13
+    VOLUME          shift and go to state 14
+
+    simple_condition               shift and go to state 16
+
+state 9
+
+    (6) conditional_strategy -> IF compound_condition .
+
+    $end            reduce using rule 6 (conditional_strategy -> IF compound_condition .)
+
+
+state 10
+
+    (7) compound_condition -> simple_condition . AND simple_condition
+    (8) compound_condition -> simple_condition . OR simple_condition
+
+    AND             shift and go to state 17
+    OR              shift and go to state 18
+
+
+state 11
+
+    (9) compound_condition -> NOT . simple_condition
+    (11) simple_condition -> . PRICE comparison NUMBER
+    (12) simple_condition -> . VOLUME comparison NUMBER
+
+    PRICE           shift and go to state 13
+    VOLUME          shift and go to state 14
+
+    simple_condition               shift and go to state 19
+
+state 12
+
+    (10) compound_condition -> LPAREN . compound_condition RPAREN
+    (7) compound_condition -> . simple_condition AND simple_condition
+    (8) compound_condition -> . simple_condition OR simple_condition
+    (9) compound_condition -> . NOT simple_condition
+    (10) compound_condition -> . LPAREN compound_condition RPAREN
+    (11) simple_condition -> . PRICE comparison NUMBER
+    (12) simple_condition -> . VOLUME comparison NUMBER
+
+    NOT             shift and go to state 11
+    LPAREN          shift and go to state 12
+    PRICE           shift and go to state 13
+    VOLUME          shift and go to state 14
+
+    compound_condition             shift and go to state 20
+    simple_condition               shift and go to state 10
+
+state 13
+
+    (11) simple_condition -> PRICE . comparison NUMBER
+    (13) comparison -> . LT
+    (14) comparison -> . GT
+    (15) comparison -> . LE
+    (16) comparison -> . GE
+    (17) comparison -> . EQ
+
+    LT              shift and go to state 22
+    GT              shift and go to state 23
+    LE              shift and go to state 24
+    GE              shift and go to state 25
+    EQ              shift and go to state 26
+
+    comparison                     shift and go to state 21
+
+state 14
+
+    (12) simple_condition -> VOLUME . comparison NUMBER
+    (13) comparison -> . LT
+    (14) comparison -> . GT
+    (15) comparison -> . LE
+    (16) comparison -> . GE
+    (17) comparison -> . EQ
+
+    LT              shift and go to state 22
+    GT              shift and go to state 23
+    LE              shift and go to state 24
+    GE              shift and go to state 25
+    EQ              shift and go to state 26
+
+    comparison                     shift and go to state 27
+
+state 15
+
+    (5) sell_strategy -> SELL IF . simple_condition
+    (11) simple_condition -> . PRICE comparison NUMBER
+    (12) simple_condition -> . VOLUME comparison NUMBER
+
+    PRICE           shift and go to state 13
+    VOLUME          shift and go to state 14
+
+    simple_condition               shift and go to state 28
+
+state 16
+
+    (4) buy_strategy -> BUY IF simple_condition .
+
+    $end            reduce using rule 4 (buy_strategy -> BUY IF simple_condition .)
+
+
+state 17
+
+    (7) compound_condition -> simple_condition AND . simple_condition
+    (11) simple_condition -> . PRICE comparison NUMBER
+    (12) simple_condition -> . VOLUME comparison NUMBER
+
+    PRICE           shift and go to state 13
+    VOLUME          shift and go to state 14
+
+    simple_condition               shift and go to state 29
+
+state 18
+
+    (8) compound_condition -> simple_condition OR . simple_condition
+    (11) simple_condition -> . PRICE comparison NUMBER
+    (12) simple_condition -> . VOLUME comparison NUMBER
+
+    PRICE           shift and go to state 13
+    VOLUME          shift and go to state 14
+
+    simple_condition               shift and go to state 30
+
+state 19
+
+    (9) compound_condition -> NOT simple_condition .
+
+    $end            reduce using rule 9 (compound_condition -> NOT simple_condition .)
+    RPAREN          reduce using rule 9 (compound_condition -> NOT simple_condition .)
+
+
+state 20
+
+    (10) compound_condition -> LPAREN compound_condition . RPAREN
+
+    RPAREN          shift and go to state 31
+
+
+state 21
+
+    (11) simple_condition -> PRICE comparison . NUMBER
+
+    NUMBER          shift and go to state 32
+
+
+state 22
+
+    (13) comparison -> LT .
+
+    NUMBER          reduce using rule 13 (comparison -> LT .)
+
+
+state 23
+
+    (14) comparison -> GT .
+
+    NUMBER          reduce using rule 14 (comparison -> GT .)
+
+
+state 24
+
+    (15) comparison -> LE .
+
+    NUMBER          reduce using rule 15 (comparison -> LE .)
+
+
+state 25
+
+    (16) comparison -> GE .
+
+    NUMBER          reduce using rule 16 (comparison -> GE .)
+
+
+state 26
+
+    (17) comparison -> EQ .
+
+    NUMBER          reduce using rule 17 (comparison -> EQ .)
+
+
+state 27
+
+    (12) simple_condition -> VOLUME comparison . NUMBER
+
+    NUMBER          shift and go to state 33
+
+
+state 28
+
+    (5) sell_strategy -> SELL IF simple_condition .
+
+    $end            reduce using rule 5 (sell_strategy -> SELL IF simple_condition .)
+
+
+state 29
+
+    (7) compound_condition -> simple_condition AND simple_condition .
+
+    $end            reduce using rule 7 (compound_condition -> simple_condition AND simple_condition .)
+    RPAREN          reduce using rule 7 (compound_condition -> simple_condition AND simple_condition .)
+
+
+state 30
+
+    (8) compound_condition -> simple_condition OR simple_condition .
+
+    $end            reduce using rule 8 (compound_condition -> simple_condition OR simple_condition .)
+    RPAREN          reduce using rule 8 (compound_condition -> simple_condition OR simple_condition .)
+
+
+state 31
+
+    (10) compound_condition -> LPAREN compound_condition RPAREN .
+
+    $end            reduce using rule 10 (compound_condition -> LPAREN compound_condition RPAREN .)
+    RPAREN          reduce using rule 10 (compound_condition -> LPAREN compound_condition RPAREN .)
+
+
+state 32
+
+    (11) simple_condition -> PRICE comparison NUMBER .
+
+    AND             reduce using rule 11 (simple_condition -> PRICE comparison NUMBER .)
+    OR              reduce using rule 11 (simple_condition -> PRICE comparison NUMBER .)
+    $end            reduce using rule 11 (simple_condition -> PRICE comparison NUMBER .)
+    RPAREN          reduce using rule 11 (simple_condition -> PRICE comparison NUMBER .)
+
+
+state 33
+
+    (12) simple_condition -> VOLUME comparison NUMBER .
+
+    AND             reduce using rule 12 (simple_condition -> VOLUME comparison NUMBER .)
+    OR              reduce using rule 12 (simple_condition -> VOLUME comparison NUMBER .)
+    $end            reduce using rule 12 (simple_condition -> VOLUME comparison NUMBER .)
+    RPAREN          reduce using rule 12 (simple_condition -> VOLUME comparison NUMBER .)
+
