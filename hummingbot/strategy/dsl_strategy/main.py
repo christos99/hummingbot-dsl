@@ -1,4 +1,4 @@
-from lexer import lexer
+from lexer_dsl import lexer
 from parser import parser
 from interpreter import Interpreter
 

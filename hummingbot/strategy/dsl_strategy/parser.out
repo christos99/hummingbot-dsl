@@ -1,392 +1,1041 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
-Unused terminals:
-
-    BALANCE
-    COMMA
-    CROSSOVER
-    EMA
-    RSI
-    SMA
-
 Grammar
 
-Rule 0     S' -> strategy
-Rule 1     strategy -> buy_strategy
-Rule 2     strategy -> sell_strategy
-Rule 3     strategy -> conditional_strategy
-Rule 4     buy_strategy -> BUY IF simple_condition
-Rule 5     sell_strategy -> SELL IF simple_condition
-Rule 6     conditional_strategy -> IF compound_condition
-Rule 7     compound_condition -> simple_condition AND simple_condition
-Rule 8     compound_condition -> simple_condition OR simple_condition
-Rule 9     compound_condition -> NOT simple_condition
-Rule 10    compound_condition -> LPAREN compound_condition RPAREN
-Rule 11    simple_condition -> PRICE comparison NUMBER
-Rule 12    simple_condition -> VOLUME comparison NUMBER
-Rule 13    comparison -> LT
-Rule 14    comparison -> GT
-Rule 15    comparison -> LE
-Rule 16    comparison -> GE
-Rule 17    comparison -> EQ
+Rule 0     S' -> command
+Rule 1     command -> BUY IF condition
+Rule 2     command -> SELL IF condition
+Rule 3     condition -> expression
+Rule 4     condition -> NOT condition
+Rule 5     condition -> condition AND condition
+Rule 6     condition -> condition OR condition
+Rule 7     expression -> PRICE
+Rule 8     expression -> VOLUME
+Rule 9     expression -> BALANCE
+Rule 10    expression -> NUMBER
+Rule 11    expression -> function_call
+Rule 12    expression -> expression LT expression
+Rule 13    expression -> expression LE expression
+Rule 14    expression -> expression GT expression
+Rule 15    expression -> expression GE expression
+Rule 16    expression -> expression EQ expression
+Rule 17    function_call -> CROSSOVER LPAREN expression COMMA expression RPAREN
+Rule 18    function_call -> SMA LPAREN NUMBER RPAREN
+Rule 19    function_call -> EMA LPAREN NUMBER RPAREN
+Rule 20    function_call -> RSI LPAREN NUMBER RPAREN
+Rule 21    expression -> LPAREN condition RPAREN
 
 Terminals, with rules where they appear
 
-AND                  : 7
-BALANCE              : 
-BUY                  : 4
-COMMA                : 
-CROSSOVER            : 
-EMA                  : 
-EQ                   : 17
-GE                   : 16
+AND                  : 5
+BALANCE              : 9
+BUY                  : 1
+COMMA                : 17
+CROSSOVER            : 17
+EMA                  : 19
+EQ                   : 16
+GE                   : 15
 GT                   : 14
-IF                   : 4 5 6
-LE                   : 15
-LPAREN               : 10
-LT                   : 13
-NOT                  : 9
-NUMBER               : 11 12
-OR                   : 8
-PRICE                : 11
-RPAREN               : 10
-RSI                  : 
-SELL                 : 5
-SMA                  : 
-VOLUME               : 12
+IF                   : 1 2
+LE                   : 13
+LPAREN               : 17 18 19 20 21
+LT                   : 12
+NOT                  : 4
+NUMBER               : 10 18 19 20
+OR                   : 6
+PRICE                : 7
+RPAREN               : 17 18 19 20 21
+RSI                  : 20
+SELL                 : 2
+SMA                  : 18
+VOLUME               : 8
 error                : 
 
 Nonterminals, with rules where they appear
 
-buy_strategy         : 1
-comparison           : 11 12
-compound_condition   : 6 10
-conditional_strategy : 3
-sell_strategy        : 2
-simple_condition     : 4 5 7 7 8 8 9
-strategy             : 0
+command              : 0
+condition            : 1 2 4 5 5 6 6 21
+expression           : 3 12 12 13 13 14 14 15 15 16 16 17 17
+function_call        : 11
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . strategy
-    (1) strategy -> . buy_strategy
-    (2) strategy -> . sell_strategy
-    (3) strategy -> . conditional_strategy
-    (4) buy_strategy -> . BUY IF simple_condition
-    (5) sell_strategy -> . SELL IF simple_condition
-    (6) conditional_strategy -> . IF compound_condition
+    (0) S' -> . command
+    (1) command -> . BUY IF condition
+    (2) command -> . SELL IF condition
 
-    BUY             shift and go to state 5
-    SELL            shift and go to state 7
-    IF              shift and go to state 6
+    BUY             shift and go to state 2
+    SELL            shift and go to state 3
 
-    strategy                       shift and go to state 1
-    buy_strategy                   shift and go to state 2
-    sell_strategy                  shift and go to state 3
-    conditional_strategy           shift and go to state 4
+    command                        shift and go to state 1
 
 state 1
 
-    (0) S' -> strategy .
+    (0) S' -> command .
 
 
 
 state 2
 
-    (1) strategy -> buy_strategy .
+    (1) command -> BUY . IF condition
 
-    $end            reduce using rule 1 (strategy -> buy_strategy .)
+    IF              shift and go to state 4
 
 
 state 3
 
-    (2) strategy -> sell_strategy .
+    (2) command -> SELL . IF condition
 
-    $end            reduce using rule 2 (strategy -> sell_strategy .)
+    IF              shift and go to state 5
 
 
 state 4
 
-    (3) strategy -> conditional_strategy .
+    (1) command -> BUY IF . condition
+    (3) condition -> . expression
+    (4) condition -> . NOT condition
+    (5) condition -> . condition AND condition
+    (6) condition -> . condition OR condition
+    (7) expression -> . PRICE
+    (8) expression -> . VOLUME
+    (9) expression -> . BALANCE
+    (10) expression -> . NUMBER
+    (11) expression -> . function_call
+    (12) expression -> . expression LT expression
+    (13) expression -> . expression LE expression
+    (14) expression -> . expression GT expression
+    (15) expression -> . expression GE expression
+    (16) expression -> . expression EQ expression
+    (21) expression -> . LPAREN condition RPAREN
+    (17) function_call -> . CROSSOVER LPAREN expression COMMA expression RPAREN
+    (18) function_call -> . SMA LPAREN NUMBER RPAREN
+    (19) function_call -> . EMA LPAREN NUMBER RPAREN
+    (20) function_call -> . RSI LPAREN NUMBER RPAREN
 
-    $end            reduce using rule 3 (strategy -> conditional_strategy .)
+    NOT             shift and go to state 8
+    PRICE           shift and go to state 9
+    VOLUME          shift and go to state 10
+    BALANCE         shift and go to state 11
+    NUMBER          shift and go to state 12
+    LPAREN          shift and go to state 14
+    CROSSOVER       shift and go to state 15
+    SMA             shift and go to state 16
+    EMA             shift and go to state 17
+    RSI             shift and go to state 18
 
+    condition                      shift and go to state 6
+    expression                     shift and go to state 7
+    function_call                  shift and go to state 13
 
 state 5
 
-    (4) buy_strategy -> BUY . IF simple_condition
+    (2) command -> SELL IF . condition
+    (3) condition -> . expression
+    (4) condition -> . NOT condition
+    (5) condition -> . condition AND condition
+    (6) condition -> . condition OR condition
+    (7) expression -> . PRICE
+    (8) expression -> . VOLUME
+    (9) expression -> . BALANCE
+    (10) expression -> . NUMBER
+    (11) expression -> . function_call
+    (12) expression -> . expression LT expression
+    (13) expression -> . expression LE expression
+    (14) expression -> . expression GT expression
+    (15) expression -> . expression GE expression
+    (16) expression -> . expression EQ expression
+    (21) expression -> . LPAREN condition RPAREN
+    (17) function_call -> . CROSSOVER LPAREN expression COMMA expression RPAREN
+    (18) function_call -> . SMA LPAREN NUMBER RPAREN
+    (19) function_call -> . EMA LPAREN NUMBER RPAREN
+    (20) function_call -> . RSI LPAREN NUMBER RPAREN
 
-    IF              shift and go to state 8
+    NOT             shift and go to state 8
+    PRICE           shift and go to state 9
+    VOLUME          shift and go to state 10
+    BALANCE         shift and go to state 11
+    NUMBER          shift and go to state 12
+    LPAREN          shift and go to state 14
+    CROSSOVER       shift and go to state 15
+    SMA             shift and go to state 16
+    EMA             shift and go to state 17
+    RSI             shift and go to state 18
 
+    condition                      shift and go to state 19
+    expression                     shift and go to state 7
+    function_call                  shift and go to state 13
 
 state 6
 
-    (6) conditional_strategy -> IF . compound_condition
-    (7) compound_condition -> . simple_condition AND simple_condition
-    (8) compound_condition -> . simple_condition OR simple_condition
-    (9) compound_condition -> . NOT simple_condition
-    (10) compound_condition -> . LPAREN compound_condition RPAREN
-    (11) simple_condition -> . PRICE comparison NUMBER
-    (12) simple_condition -> . VOLUME comparison NUMBER
+    (1) command -> BUY IF condition .
+    (5) condition -> condition . AND condition
+    (6) condition -> condition . OR condition
 
-    NOT             shift and go to state 11
-    LPAREN          shift and go to state 12
-    PRICE           shift and go to state 13
-    VOLUME          shift and go to state 14
+    $end            reduce using rule 1 (command -> BUY IF condition .)
+    AND             shift and go to state 20
+    OR              shift and go to state 21
 
-    compound_condition             shift and go to state 9
-    simple_condition               shift and go to state 10
 
 state 7
 
-    (5) sell_strategy -> SELL . IF simple_condition
+    (3) condition -> expression .
+    (12) expression -> expression . LT expression
+    (13) expression -> expression . LE expression
+    (14) expression -> expression . GT expression
+    (15) expression -> expression . GE expression
+    (16) expression -> expression . EQ expression
 
-    IF              shift and go to state 15
+    AND             reduce using rule 3 (condition -> expression .)
+    OR              reduce using rule 3 (condition -> expression .)
+    $end            reduce using rule 3 (condition -> expression .)
+    RPAREN          reduce using rule 3 (condition -> expression .)
+    LT              shift and go to state 22
+    LE              shift and go to state 23
+    GT              shift and go to state 24
+    GE              shift and go to state 25
+    EQ              shift and go to state 26
 
 
 state 8
 
-    (4) buy_strategy -> BUY IF . simple_condition
-    (11) simple_condition -> . PRICE comparison NUMBER
-    (12) simple_condition -> . VOLUME comparison NUMBER
+    (4) condition -> NOT . condition
+    (3) condition -> . expression
+    (4) condition -> . NOT condition
+    (5) condition -> . condition AND condition
+    (6) condition -> . condition OR condition
+    (7) expression -> . PRICE
+    (8) expression -> . VOLUME
+    (9) expression -> . BALANCE
+    (10) expression -> . NUMBER
+    (11) expression -> . function_call
+    (12) expression -> . expression LT expression
+    (13) expression -> . expression LE expression
+    (14) expression -> . expression GT expression
+    (15) expression -> . expression GE expression
+    (16) expression -> . expression EQ expression
+    (21) expression -> . LPAREN condition RPAREN
+    (17) function_call -> . CROSSOVER LPAREN expression COMMA expression RPAREN
+    (18) function_call -> . SMA LPAREN NUMBER RPAREN
+    (19) function_call -> . EMA LPAREN NUMBER RPAREN
+    (20) function_call -> . RSI LPAREN NUMBER RPAREN
 
-    PRICE           shift and go to state 13
-    VOLUME          shift and go to state 14
+    NOT             shift and go to state 8
+    PRICE           shift and go to state 9
+    VOLUME          shift and go to state 10
+    BALANCE         shift and go to state 11
+    NUMBER          shift and go to state 12
+    LPAREN          shift and go to state 14
+    CROSSOVER       shift and go to state 15
+    SMA             shift and go to state 16
+    EMA             shift and go to state 17
+    RSI             shift and go to state 18
 
-    simple_condition               shift and go to state 16
+    condition                      shift and go to state 27
+    expression                     shift and go to state 7
+    function_call                  shift and go to state 13
 
 state 9
 
-    (6) conditional_strategy -> IF compound_condition .
+    (7) expression -> PRICE .
 
-    $end            reduce using rule 6 (conditional_strategy -> IF compound_condition .)
+    LT              reduce using rule 7 (expression -> PRICE .)
+    LE              reduce using rule 7 (expression -> PRICE .)
+    GT              reduce using rule 7 (expression -> PRICE .)
+    GE              reduce using rule 7 (expression -> PRICE .)
+    EQ              reduce using rule 7 (expression -> PRICE .)
+    AND             reduce using rule 7 (expression -> PRICE .)
+    OR              reduce using rule 7 (expression -> PRICE .)
+    $end            reduce using rule 7 (expression -> PRICE .)
+    RPAREN          reduce using rule 7 (expression -> PRICE .)
+    COMMA           reduce using rule 7 (expression -> PRICE .)
 
 
 state 10
 
-    (7) compound_condition -> simple_condition . AND simple_condition
-    (8) compound_condition -> simple_condition . OR simple_condition
+    (8) expression -> VOLUME .
 
-    AND             shift and go to state 17
-    OR              shift and go to state 18
+    LT              reduce using rule 8 (expression -> VOLUME .)
+    LE              reduce using rule 8 (expression -> VOLUME .)
+    GT              reduce using rule 8 (expression -> VOLUME .)
+    GE              reduce using rule 8 (expression -> VOLUME .)
+    EQ              reduce using rule 8 (expression -> VOLUME .)
+    AND             reduce using rule 8 (expression -> VOLUME .)
+    OR              reduce using rule 8 (expression -> VOLUME .)
+    $end            reduce using rule 8 (expression -> VOLUME .)
+    RPAREN          reduce using rule 8 (expression -> VOLUME .)
+    COMMA           reduce using rule 8 (expression -> VOLUME .)
 
 
 state 11
 
-    (9) compound_condition -> NOT . simple_condition
-    (11) simple_condition -> . PRICE comparison NUMBER
-    (12) simple_condition -> . VOLUME comparison NUMBER
+    (9) expression -> BALANCE .
 
-    PRICE           shift and go to state 13
-    VOLUME          shift and go to state 14
+    LT              reduce using rule 9 (expression -> BALANCE .)
+    LE              reduce using rule 9 (expression -> BALANCE .)
+    GT              reduce using rule 9 (expression -> BALANCE .)
+    GE              reduce using rule 9 (expression -> BALANCE .)
+    EQ              reduce using rule 9 (expression -> BALANCE .)
+    AND             reduce using rule 9 (expression -> BALANCE .)
+    OR              reduce using rule 9 (expression -> BALANCE .)
+    $end            reduce using rule 9 (expression -> BALANCE .)
+    RPAREN          reduce using rule 9 (expression -> BALANCE .)
+    COMMA           reduce using rule 9 (expression -> BALANCE .)
 
-    simple_condition               shift and go to state 19
 
 state 12
 
-    (10) compound_condition -> LPAREN . compound_condition RPAREN
-    (7) compound_condition -> . simple_condition AND simple_condition
-    (8) compound_condition -> . simple_condition OR simple_condition
-    (9) compound_condition -> . NOT simple_condition
-    (10) compound_condition -> . LPAREN compound_condition RPAREN
-    (11) simple_condition -> . PRICE comparison NUMBER
-    (12) simple_condition -> . VOLUME comparison NUMBER
+    (10) expression -> NUMBER .
 
-    NOT             shift and go to state 11
-    LPAREN          shift and go to state 12
-    PRICE           shift and go to state 13
-    VOLUME          shift and go to state 14
+    LT              reduce using rule 10 (expression -> NUMBER .)
+    LE              reduce using rule 10 (expression -> NUMBER .)
+    GT              reduce using rule 10 (expression -> NUMBER .)
+    GE              reduce using rule 10 (expression -> NUMBER .)
+    EQ              reduce using rule 10 (expression -> NUMBER .)
+    AND             reduce using rule 10 (expression -> NUMBER .)
+    OR              reduce using rule 10 (expression -> NUMBER .)
+    $end            reduce using rule 10 (expression -> NUMBER .)
+    RPAREN          reduce using rule 10 (expression -> NUMBER .)
+    COMMA           reduce using rule 10 (expression -> NUMBER .)
 
-    compound_condition             shift and go to state 20
-    simple_condition               shift and go to state 10
 
 state 13
 
-    (11) simple_condition -> PRICE . comparison NUMBER
-    (13) comparison -> . LT
-    (14) comparison -> . GT
-    (15) comparison -> . LE
-    (16) comparison -> . GE
-    (17) comparison -> . EQ
+    (11) expression -> function_call .
 
-    LT              shift and go to state 22
-    GT              shift and go to state 23
-    LE              shift and go to state 24
-    GE              shift and go to state 25
-    EQ              shift and go to state 26
+    LT              reduce using rule 11 (expression -> function_call .)
+    LE              reduce using rule 11 (expression -> function_call .)
+    GT              reduce using rule 11 (expression -> function_call .)
+    GE              reduce using rule 11 (expression -> function_call .)
+    EQ              reduce using rule 11 (expression -> function_call .)
+    AND             reduce using rule 11 (expression -> function_call .)
+    OR              reduce using rule 11 (expression -> function_call .)
+    $end            reduce using rule 11 (expression -> function_call .)
+    RPAREN          reduce using rule 11 (expression -> function_call .)
+    COMMA           reduce using rule 11 (expression -> function_call .)
 
-    comparison                     shift and go to state 21
 
 state 14
 
-    (12) simple_condition -> VOLUME . comparison NUMBER
-    (13) comparison -> . LT
-    (14) comparison -> . GT
-    (15) comparison -> . LE
-    (16) comparison -> . GE
-    (17) comparison -> . EQ
+    (21) expression -> LPAREN . condition RPAREN
+    (3) condition -> . expression
+    (4) condition -> . NOT condition
+    (5) condition -> . condition AND condition
+    (6) condition -> . condition OR condition
+    (7) expression -> . PRICE
+    (8) expression -> . VOLUME
+    (9) expression -> . BALANCE
+    (10) expression -> . NUMBER
+    (11) expression -> . function_call
+    (12) expression -> . expression LT expression
+    (13) expression -> . expression LE expression
+    (14) expression -> . expression GT expression
+    (15) expression -> . expression GE expression
+    (16) expression -> . expression EQ expression
+    (21) expression -> . LPAREN condition RPAREN
+    (17) function_call -> . CROSSOVER LPAREN expression COMMA expression RPAREN
+    (18) function_call -> . SMA LPAREN NUMBER RPAREN
+    (19) function_call -> . EMA LPAREN NUMBER RPAREN
+    (20) function_call -> . RSI LPAREN NUMBER RPAREN
 
-    LT              shift and go to state 22
-    GT              shift and go to state 23
-    LE              shift and go to state 24
-    GE              shift and go to state 25
-    EQ              shift and go to state 26
+    NOT             shift and go to state 8
+    PRICE           shift and go to state 9
+    VOLUME          shift and go to state 10
+    BALANCE         shift and go to state 11
+    NUMBER          shift and go to state 12
+    LPAREN          shift and go to state 14
+    CROSSOVER       shift and go to state 15
+    SMA             shift and go to state 16
+    EMA             shift and go to state 17
+    RSI             shift and go to state 18
 
-    comparison                     shift and go to state 27
+    condition                      shift and go to state 28
+    expression                     shift and go to state 7
+    function_call                  shift and go to state 13
 
 state 15
 
-    (5) sell_strategy -> SELL IF . simple_condition
-    (11) simple_condition -> . PRICE comparison NUMBER
-    (12) simple_condition -> . VOLUME comparison NUMBER
+    (17) function_call -> CROSSOVER . LPAREN expression COMMA expression RPAREN
 
-    PRICE           shift and go to state 13
-    VOLUME          shift and go to state 14
+    LPAREN          shift and go to state 29
 
-    simple_condition               shift and go to state 28
 
 state 16
 
-    (4) buy_strategy -> BUY IF simple_condition .
+    (18) function_call -> SMA . LPAREN NUMBER RPAREN
 
-    $end            reduce using rule 4 (buy_strategy -> BUY IF simple_condition .)
+    LPAREN          shift and go to state 30
 
 
 state 17
 
-    (7) compound_condition -> simple_condition AND . simple_condition
-    (11) simple_condition -> . PRICE comparison NUMBER
-    (12) simple_condition -> . VOLUME comparison NUMBER
+    (19) function_call -> EMA . LPAREN NUMBER RPAREN
 
-    PRICE           shift and go to state 13
-    VOLUME          shift and go to state 14
+    LPAREN          shift and go to state 31
 
-    simple_condition               shift and go to state 29
 
 state 18
 
-    (8) compound_condition -> simple_condition OR . simple_condition
-    (11) simple_condition -> . PRICE comparison NUMBER
-    (12) simple_condition -> . VOLUME comparison NUMBER
+    (20) function_call -> RSI . LPAREN NUMBER RPAREN
 
-    PRICE           shift and go to state 13
-    VOLUME          shift and go to state 14
+    LPAREN          shift and go to state 32
 
-    simple_condition               shift and go to state 30
 
 state 19
 
-    (9) compound_condition -> NOT simple_condition .
+    (2) command -> SELL IF condition .
+    (5) condition -> condition . AND condition
+    (6) condition -> condition . OR condition
 
-    $end            reduce using rule 9 (compound_condition -> NOT simple_condition .)
-    RPAREN          reduce using rule 9 (compound_condition -> NOT simple_condition .)
+    $end            reduce using rule 2 (command -> SELL IF condition .)
+    AND             shift and go to state 20
+    OR              shift and go to state 21
 
 
 state 20
 
-    (10) compound_condition -> LPAREN compound_condition . RPAREN
+    (5) condition -> condition AND . condition
+    (3) condition -> . expression
+    (4) condition -> . NOT condition
+    (5) condition -> . condition AND condition
+    (6) condition -> . condition OR condition
+    (7) expression -> . PRICE
+    (8) expression -> . VOLUME
+    (9) expression -> . BALANCE
+    (10) expression -> . NUMBER
+    (11) expression -> . function_call
+    (12) expression -> . expression LT expression
+    (13) expression -> . expression LE expression
+    (14) expression -> . expression GT expression
+    (15) expression -> . expression GE expression
+    (16) expression -> . expression EQ expression
+    (21) expression -> . LPAREN condition RPAREN
+    (17) function_call -> . CROSSOVER LPAREN expression COMMA expression RPAREN
+    (18) function_call -> . SMA LPAREN NUMBER RPAREN
+    (19) function_call -> . EMA LPAREN NUMBER RPAREN
+    (20) function_call -> . RSI LPAREN NUMBER RPAREN
 
-    RPAREN          shift and go to state 31
+    NOT             shift and go to state 8
+    PRICE           shift and go to state 9
+    VOLUME          shift and go to state 10
+    BALANCE         shift and go to state 11
+    NUMBER          shift and go to state 12
+    LPAREN          shift and go to state 14
+    CROSSOVER       shift and go to state 15
+    SMA             shift and go to state 16
+    EMA             shift and go to state 17
+    RSI             shift and go to state 18
 
+    condition                      shift and go to state 33
+    expression                     shift and go to state 7
+    function_call                  shift and go to state 13
 
 state 21
 
-    (11) simple_condition -> PRICE comparison . NUMBER
+    (6) condition -> condition OR . condition
+    (3) condition -> . expression
+    (4) condition -> . NOT condition
+    (5) condition -> . condition AND condition
+    (6) condition -> . condition OR condition
+    (7) expression -> . PRICE
+    (8) expression -> . VOLUME
+    (9) expression -> . BALANCE
+    (10) expression -> . NUMBER
+    (11) expression -> . function_call
+    (12) expression -> . expression LT expression
+    (13) expression -> . expression LE expression
+    (14) expression -> . expression GT expression
+    (15) expression -> . expression GE expression
+    (16) expression -> . expression EQ expression
+    (21) expression -> . LPAREN condition RPAREN
+    (17) function_call -> . CROSSOVER LPAREN expression COMMA expression RPAREN
+    (18) function_call -> . SMA LPAREN NUMBER RPAREN
+    (19) function_call -> . EMA LPAREN NUMBER RPAREN
+    (20) function_call -> . RSI LPAREN NUMBER RPAREN
 
-    NUMBER          shift and go to state 32
+    NOT             shift and go to state 8
+    PRICE           shift and go to state 9
+    VOLUME          shift and go to state 10
+    BALANCE         shift and go to state 11
+    NUMBER          shift and go to state 12
+    LPAREN          shift and go to state 14
+    CROSSOVER       shift and go to state 15
+    SMA             shift and go to state 16
+    EMA             shift and go to state 17
+    RSI             shift and go to state 18
 
+    condition                      shift and go to state 34
+    expression                     shift and go to state 7
+    function_call                  shift and go to state 13
 
 state 22
 
-    (13) comparison -> LT .
+    (12) expression -> expression LT . expression
+    (7) expression -> . PRICE
+    (8) expression -> . VOLUME
+    (9) expression -> . BALANCE
+    (10) expression -> . NUMBER
+    (11) expression -> . function_call
+    (12) expression -> . expression LT expression
+    (13) expression -> . expression LE expression
+    (14) expression -> . expression GT expression
+    (15) expression -> . expression GE expression
+    (16) expression -> . expression EQ expression
+    (21) expression -> . LPAREN condition RPAREN
+    (17) function_call -> . CROSSOVER LPAREN expression COMMA expression RPAREN
+    (18) function_call -> . SMA LPAREN NUMBER RPAREN
+    (19) function_call -> . EMA LPAREN NUMBER RPAREN
+    (20) function_call -> . RSI LPAREN NUMBER RPAREN
 
-    NUMBER          reduce using rule 13 (comparison -> LT .)
+    PRICE           shift and go to state 9
+    VOLUME          shift and go to state 10
+    BALANCE         shift and go to state 11
+    NUMBER          shift and go to state 12
+    LPAREN          shift and go to state 14
+    CROSSOVER       shift and go to state 15
+    SMA             shift and go to state 16
+    EMA             shift and go to state 17
+    RSI             shift and go to state 18
 
+    expression                     shift and go to state 35
+    function_call                  shift and go to state 13
 
 state 23
 
-    (14) comparison -> GT .
+    (13) expression -> expression LE . expression
+    (7) expression -> . PRICE
+    (8) expression -> . VOLUME
+    (9) expression -> . BALANCE
+    (10) expression -> . NUMBER
+    (11) expression -> . function_call
+    (12) expression -> . expression LT expression
+    (13) expression -> . expression LE expression
+    (14) expression -> . expression GT expression
+    (15) expression -> . expression GE expression
+    (16) expression -> . expression EQ expression
+    (21) expression -> . LPAREN condition RPAREN
+    (17) function_call -> . CROSSOVER LPAREN expression COMMA expression RPAREN
+    (18) function_call -> . SMA LPAREN NUMBER RPAREN
+    (19) function_call -> . EMA LPAREN NUMBER RPAREN
+    (20) function_call -> . RSI LPAREN NUMBER RPAREN
 
-    NUMBER          reduce using rule 14 (comparison -> GT .)
+    PRICE           shift and go to state 9
+    VOLUME          shift and go to state 10
+    BALANCE         shift and go to state 11
+    NUMBER          shift and go to state 12
+    LPAREN          shift and go to state 14
+    CROSSOVER       shift and go to state 15
+    SMA             shift and go to state 16
+    EMA             shift and go to state 17
+    RSI             shift and go to state 18
 
+    expression                     shift and go to state 36
+    function_call                  shift and go to state 13
 
 state 24
 
-    (15) comparison -> LE .
+    (14) expression -> expression GT . expression
+    (7) expression -> . PRICE
+    (8) expression -> . VOLUME
+    (9) expression -> . BALANCE
+    (10) expression -> . NUMBER
+    (11) expression -> . function_call
+    (12) expression -> . expression LT expression
+    (13) expression -> . expression LE expression
+    (14) expression -> . expression GT expression
+    (15) expression -> . expression GE expression
+    (16) expression -> . expression EQ expression
+    (21) expression -> . LPAREN condition RPAREN
+    (17) function_call -> . CROSSOVER LPAREN expression COMMA expression RPAREN
+    (18) function_call -> . SMA LPAREN NUMBER RPAREN
+    (19) function_call -> . EMA LPAREN NUMBER RPAREN
+    (20) function_call -> . RSI LPAREN NUMBER RPAREN
 
-    NUMBER          reduce using rule 15 (comparison -> LE .)
+    PRICE           shift and go to state 9
+    VOLUME          shift and go to state 10
+    BALANCE         shift and go to state 11
+    NUMBER          shift and go to state 12
+    LPAREN          shift and go to state 14
+    CROSSOVER       shift and go to state 15
+    SMA             shift and go to state 16
+    EMA             shift and go to state 17
+    RSI             shift and go to state 18
 
+    expression                     shift and go to state 37
+    function_call                  shift and go to state 13
 
 state 25
 
-    (16) comparison -> GE .
+    (15) expression -> expression GE . expression
+    (7) expression -> . PRICE
+    (8) expression -> . VOLUME
+    (9) expression -> . BALANCE
+    (10) expression -> . NUMBER
+    (11) expression -> . function_call
+    (12) expression -> . expression LT expression
+    (13) expression -> . expression LE expression
+    (14) expression -> . expression GT expression
+    (15) expression -> . expression GE expression
+    (16) expression -> . expression EQ expression
+    (21) expression -> . LPAREN condition RPAREN
+    (17) function_call -> . CROSSOVER LPAREN expression COMMA expression RPAREN
+    (18) function_call -> . SMA LPAREN NUMBER RPAREN
+    (19) function_call -> . EMA LPAREN NUMBER RPAREN
+    (20) function_call -> . RSI LPAREN NUMBER RPAREN
 
-    NUMBER          reduce using rule 16 (comparison -> GE .)
+    PRICE           shift and go to state 9
+    VOLUME          shift and go to state 10
+    BALANCE         shift and go to state 11
+    NUMBER          shift and go to state 12
+    LPAREN          shift and go to state 14
+    CROSSOVER       shift and go to state 15
+    SMA             shift and go to state 16
+    EMA             shift and go to state 17
+    RSI             shift and go to state 18
 
+    expression                     shift and go to state 38
+    function_call                  shift and go to state 13
 
 state 26
 
-    (17) comparison -> EQ .
+    (16) expression -> expression EQ . expression
+    (7) expression -> . PRICE
+    (8) expression -> . VOLUME
+    (9) expression -> . BALANCE
+    (10) expression -> . NUMBER
+    (11) expression -> . function_call
+    (12) expression -> . expression LT expression
+    (13) expression -> . expression LE expression
+    (14) expression -> . expression GT expression
+    (15) expression -> . expression GE expression
+    (16) expression -> . expression EQ expression
+    (21) expression -> . LPAREN condition RPAREN
+    (17) function_call -> . CROSSOVER LPAREN expression COMMA expression RPAREN
+    (18) function_call -> . SMA LPAREN NUMBER RPAREN
+    (19) function_call -> . EMA LPAREN NUMBER RPAREN
+    (20) function_call -> . RSI LPAREN NUMBER RPAREN
 
-    NUMBER          reduce using rule 17 (comparison -> EQ .)
+    PRICE           shift and go to state 9
+    VOLUME          shift and go to state 10
+    BALANCE         shift and go to state 11
+    NUMBER          shift and go to state 12
+    LPAREN          shift and go to state 14
+    CROSSOVER       shift and go to state 15
+    SMA             shift and go to state 16
+    EMA             shift and go to state 17
+    RSI             shift and go to state 18
 
+    expression                     shift and go to state 39
+    function_call                  shift and go to state 13
 
 state 27
 
-    (12) simple_condition -> VOLUME comparison . NUMBER
+    (4) condition -> NOT condition .
+    (5) condition -> condition . AND condition
+    (6) condition -> condition . OR condition
 
-    NUMBER          shift and go to state 33
+    AND             reduce using rule 4 (condition -> NOT condition .)
+    OR              reduce using rule 4 (condition -> NOT condition .)
+    $end            reduce using rule 4 (condition -> NOT condition .)
+    RPAREN          reduce using rule 4 (condition -> NOT condition .)
+
+  ! AND             [ shift and go to state 20 ]
+  ! OR              [ shift and go to state 21 ]
 
 
 state 28
 
-    (5) sell_strategy -> SELL IF simple_condition .
+    (21) expression -> LPAREN condition . RPAREN
+    (5) condition -> condition . AND condition
+    (6) condition -> condition . OR condition
 
-    $end            reduce using rule 5 (sell_strategy -> SELL IF simple_condition .)
+    RPAREN          shift and go to state 40
+    AND             shift and go to state 20
+    OR              shift and go to state 21
 
 
 state 29
 
-    (7) compound_condition -> simple_condition AND simple_condition .
+    (17) function_call -> CROSSOVER LPAREN . expression COMMA expression RPAREN
+    (7) expression -> . PRICE
+    (8) expression -> . VOLUME
+    (9) expression -> . BALANCE
+    (10) expression -> . NUMBER
+    (11) expression -> . function_call
+    (12) expression -> . expression LT expression
+    (13) expression -> . expression LE expression
+    (14) expression -> . expression GT expression
+    (15) expression -> . expression GE expression
+    (16) expression -> . expression EQ expression
+    (21) expression -> . LPAREN condition RPAREN
+    (17) function_call -> . CROSSOVER LPAREN expression COMMA expression RPAREN
+    (18) function_call -> . SMA LPAREN NUMBER RPAREN
+    (19) function_call -> . EMA LPAREN NUMBER RPAREN
+    (20) function_call -> . RSI LPAREN NUMBER RPAREN
 
-    $end            reduce using rule 7 (compound_condition -> simple_condition AND simple_condition .)
-    RPAREN          reduce using rule 7 (compound_condition -> simple_condition AND simple_condition .)
+    PRICE           shift and go to state 9
+    VOLUME          shift and go to state 10
+    BALANCE         shift and go to state 11
+    NUMBER          shift and go to state 12
+    LPAREN          shift and go to state 14
+    CROSSOVER       shift and go to state 15
+    SMA             shift and go to state 16
+    EMA             shift and go to state 17
+    RSI             shift and go to state 18
 
+    expression                     shift and go to state 41
+    function_call                  shift and go to state 13
 
 state 30
 
-    (8) compound_condition -> simple_condition OR simple_condition .
+    (18) function_call -> SMA LPAREN . NUMBER RPAREN
 
-    $end            reduce using rule 8 (compound_condition -> simple_condition OR simple_condition .)
-    RPAREN          reduce using rule 8 (compound_condition -> simple_condition OR simple_condition .)
+    NUMBER          shift and go to state 42
 
 
 state 31
 
-    (10) compound_condition -> LPAREN compound_condition RPAREN .
+    (19) function_call -> EMA LPAREN . NUMBER RPAREN
 
-    $end            reduce using rule 10 (compound_condition -> LPAREN compound_condition RPAREN .)
-    RPAREN          reduce using rule 10 (compound_condition -> LPAREN compound_condition RPAREN .)
+    NUMBER          shift and go to state 43
 
 
 state 32
 
-    (11) simple_condition -> PRICE comparison NUMBER .
+    (20) function_call -> RSI LPAREN . NUMBER RPAREN
 
-    AND             reduce using rule 11 (simple_condition -> PRICE comparison NUMBER .)
-    OR              reduce using rule 11 (simple_condition -> PRICE comparison NUMBER .)
-    $end            reduce using rule 11 (simple_condition -> PRICE comparison NUMBER .)
-    RPAREN          reduce using rule 11 (simple_condition -> PRICE comparison NUMBER .)
+    NUMBER          shift and go to state 44
 
 
 state 33
 
-    (12) simple_condition -> VOLUME comparison NUMBER .
+    (5) condition -> condition AND condition .
+    (5) condition -> condition . AND condition
+    (6) condition -> condition . OR condition
 
-    AND             reduce using rule 12 (simple_condition -> VOLUME comparison NUMBER .)
-    OR              reduce using rule 12 (simple_condition -> VOLUME comparison NUMBER .)
-    $end            reduce using rule 12 (simple_condition -> VOLUME comparison NUMBER .)
-    RPAREN          reduce using rule 12 (simple_condition -> VOLUME comparison NUMBER .)
+    AND             reduce using rule 5 (condition -> condition AND condition .)
+    OR              reduce using rule 5 (condition -> condition AND condition .)
+    $end            reduce using rule 5 (condition -> condition AND condition .)
+    RPAREN          reduce using rule 5 (condition -> condition AND condition .)
+
+  ! AND             [ shift and go to state 20 ]
+  ! OR              [ shift and go to state 21 ]
+
+
+state 34
+
+    (6) condition -> condition OR condition .
+    (5) condition -> condition . AND condition
+    (6) condition -> condition . OR condition
+
+    OR              reduce using rule 6 (condition -> condition OR condition .)
+    $end            reduce using rule 6 (condition -> condition OR condition .)
+    RPAREN          reduce using rule 6 (condition -> condition OR condition .)
+    AND             shift and go to state 20
+
+  ! AND             [ reduce using rule 6 (condition -> condition OR condition .) ]
+  ! OR              [ shift and go to state 21 ]
+
+
+state 35
+
+    (12) expression -> expression LT expression .
+    (12) expression -> expression . LT expression
+    (13) expression -> expression . LE expression
+    (14) expression -> expression . GT expression
+    (15) expression -> expression . GE expression
+    (16) expression -> expression . EQ expression
+
+    LT              reduce using rule 12 (expression -> expression LT expression .)
+    LE              reduce using rule 12 (expression -> expression LT expression .)
+    GT              reduce using rule 12 (expression -> expression LT expression .)
+    GE              reduce using rule 12 (expression -> expression LT expression .)
+    EQ              reduce using rule 12 (expression -> expression LT expression .)
+    AND             reduce using rule 12 (expression -> expression LT expression .)
+    OR              reduce using rule 12 (expression -> expression LT expression .)
+    $end            reduce using rule 12 (expression -> expression LT expression .)
+    RPAREN          reduce using rule 12 (expression -> expression LT expression .)
+    COMMA           reduce using rule 12 (expression -> expression LT expression .)
+
+  ! LT              [ shift and go to state 22 ]
+  ! LE              [ shift and go to state 23 ]
+  ! GT              [ shift and go to state 24 ]
+  ! GE              [ shift and go to state 25 ]
+  ! EQ              [ shift and go to state 26 ]
+
+
+state 36
+
+    (13) expression -> expression LE expression .
+    (12) expression -> expression . LT expression
+    (13) expression -> expression . LE expression
+    (14) expression -> expression . GT expression
+    (15) expression -> expression . GE expression
+    (16) expression -> expression . EQ expression
+
+    LT              reduce using rule 13 (expression -> expression LE expression .)
+    LE              reduce using rule 13 (expression -> expression LE expression .)
+    GT              reduce using rule 13 (expression -> expression LE expression .)
+    GE              reduce using rule 13 (expression -> expression LE expression .)
+    EQ              reduce using rule 13 (expression -> expression LE expression .)
+    AND             reduce using rule 13 (expression -> expression LE expression .)
+    OR              reduce using rule 13 (expression -> expression LE expression .)
+    $end            reduce using rule 13 (expression -> expression LE expression .)
+    RPAREN          reduce using rule 13 (expression -> expression LE expression .)
+    COMMA           reduce using rule 13 (expression -> expression LE expression .)
+
+  ! LT              [ shift and go to state 22 ]
+  ! LE              [ shift and go to state 23 ]
+  ! GT              [ shift and go to state 24 ]
+  ! GE              [ shift and go to state 25 ]
+  ! EQ              [ shift and go to state 26 ]
+
+
+state 37
+
+    (14) expression -> expression GT expression .
+    (12) expression -> expression . LT expression
+    (13) expression -> expression . LE expression
+    (14) expression -> expression . GT expression
+    (15) expression -> expression . GE expression
+    (16) expression -> expression . EQ expression
+
+    LT              reduce using rule 14 (expression -> expression GT expression .)
+    LE              reduce using rule 14 (expression -> expression GT expression .)
+    GT              reduce using rule 14 (expression -> expression GT expression .)
+    GE              reduce using rule 14 (expression -> expression GT expression .)
+    EQ              reduce using rule 14 (expression -> expression GT expression .)
+    AND             reduce using rule 14 (expression -> expression GT expression .)
+    OR              reduce using rule 14 (expression -> expression GT expression .)
+    $end            reduce using rule 14 (expression -> expression GT expression .)
+    RPAREN          reduce using rule 14 (expression -> expression GT expression .)
+    COMMA           reduce using rule 14 (expression -> expression GT expression .)
+
+  ! LT              [ shift and go to state 22 ]
+  ! LE              [ shift and go to state 23 ]
+  ! GT              [ shift and go to state 24 ]
+  ! GE              [ shift and go to state 25 ]
+  ! EQ              [ shift and go to state 26 ]
+
+
+state 38
+
+    (15) expression -> expression GE expression .
+    (12) expression -> expression . LT expression
+    (13) expression -> expression . LE expression
+    (14) expression -> expression . GT expression
+    (15) expression -> expression . GE expression
+    (16) expression -> expression . EQ expression
+
+    LT              reduce using rule 15 (expression -> expression GE expression .)
+    LE              reduce using rule 15 (expression -> expression GE expression .)
+    GT              reduce using rule 15 (expression -> expression GE expression .)
+    GE              reduce using rule 15 (expression -> expression GE expression .)
+    EQ              reduce using rule 15 (expression -> expression GE expression .)
+    AND             reduce using rule 15 (expression -> expression GE expression .)
+    OR              reduce using rule 15 (expression -> expression GE expression .)
+    $end            reduce using rule 15 (expression -> expression GE expression .)
+    RPAREN          reduce using rule 15 (expression -> expression GE expression .)
+    COMMA           reduce using rule 15 (expression -> expression GE expression .)
+
+  ! LT              [ shift and go to state 22 ]
+  ! LE              [ shift and go to state 23 ]
+  ! GT              [ shift and go to state 24 ]
+  ! GE              [ shift and go to state 25 ]
+  ! EQ              [ shift and go to state 26 ]
+
+
+state 39
+
+    (16) expression -> expression EQ expression .
+    (12) expression -> expression . LT expression
+    (13) expression -> expression . LE expression
+    (14) expression -> expression . GT expression
+    (15) expression -> expression . GE expression
+    (16) expression -> expression . EQ expression
+
+    LT              reduce using rule 16 (expression -> expression EQ expression .)
+    LE              reduce using rule 16 (expression -> expression EQ expression .)
+    GT              reduce using rule 16 (expression -> expression EQ expression .)
+    GE              reduce using rule 16 (expression -> expression EQ expression .)
+    EQ              reduce using rule 16 (expression -> expression EQ expression .)
+    AND             reduce using rule 16 (expression -> expression EQ expression .)
+    OR              reduce using rule 16 (expression -> expression EQ expression .)
+    $end            reduce using rule 16 (expression -> expression EQ expression .)
+    RPAREN          reduce using rule 16 (expression -> expression EQ expression .)
+    COMMA           reduce using rule 16 (expression -> expression EQ expression .)
+
+  ! LT              [ shift and go to state 22 ]
+  ! LE              [ shift and go to state 23 ]
+  ! GT              [ shift and go to state 24 ]
+  ! GE              [ shift and go to state 25 ]
+  ! EQ              [ shift and go to state 26 ]
+
+
+state 40
+
+    (21) expression -> LPAREN condition RPAREN .
+
+    LT              reduce using rule 21 (expression -> LPAREN condition RPAREN .)
+    LE              reduce using rule 21 (expression -> LPAREN condition RPAREN .)
+    GT              reduce using rule 21 (expression -> LPAREN condition RPAREN .)
+    GE              reduce using rule 21 (expression -> LPAREN condition RPAREN .)
+    EQ              reduce using rule 21 (expression -> LPAREN condition RPAREN .)
+    AND             reduce using rule 21 (expression -> LPAREN condition RPAREN .)
+    OR              reduce using rule 21 (expression -> LPAREN condition RPAREN .)
+    $end            reduce using rule 21 (expression -> LPAREN condition RPAREN .)
+    RPAREN          reduce using rule 21 (expression -> LPAREN condition RPAREN .)
+    COMMA           reduce using rule 21 (expression -> LPAREN condition RPAREN .)
+
+
+state 41
+
+    (17) function_call -> CROSSOVER LPAREN expression . COMMA expression RPAREN
+    (12) expression -> expression . LT expression
+    (13) expression -> expression . LE expression
+    (14) expression -> expression . GT expression
+    (15) expression -> expression . GE expression
+    (16) expression -> expression . EQ expression
+
+    COMMA           shift and go to state 45
+    LT              shift and go to state 22
+    LE              shift and go to state 23
+    GT              shift and go to state 24
+    GE              shift and go to state 25
+    EQ              shift and go to state 26
+
+
+state 42
+
+    (18) function_call -> SMA LPAREN NUMBER . RPAREN
+
+    RPAREN          shift and go to state 46
+
+
+state 43
+
+    (19) function_call -> EMA LPAREN NUMBER . RPAREN
+
+    RPAREN          shift and go to state 47
+
+
+state 44
+
+    (20) function_call -> RSI LPAREN NUMBER . RPAREN
+
+    RPAREN          shift and go to state 48
+
+
+state 45
+
+    (17) function_call -> CROSSOVER LPAREN expression COMMA . expression RPAREN
+    (7) expression -> . PRICE
+    (8) expression -> . VOLUME
+    (9) expression -> . BALANCE
+    (10) expression -> . NUMBER
+    (11) expression -> . function_call
+    (12) expression -> . expression LT expression
+    (13) expression -> . expression LE expression
+    (14) expression -> . expression GT expression
+    (15) expression -> . expression GE expression
+    (16) expression -> . expression EQ expression
+    (21) expression -> . LPAREN condition RPAREN
+    (17) function_call -> . CROSSOVER LPAREN expression COMMA expression RPAREN
+    (18) function_call -> . SMA LPAREN NUMBER RPAREN
+    (19) function_call -> . EMA LPAREN NUMBER RPAREN
+    (20) function_call -> . RSI LPAREN NUMBER RPAREN
+
+    PRICE           shift and go to state 9
+    VOLUME          shift and go to state 10
+    BALANCE         shift and go to state 11
+    NUMBER          shift and go to state 12
+    LPAREN          shift and go to state 14
+    CROSSOVER       shift and go to state 15
+    SMA             shift and go to state 16
+    EMA             shift and go to state 17
+    RSI             shift and go to state 18
+
+    expression                     shift and go to state 49
+    function_call                  shift and go to state 13
+
+state 46
+
+    (18) function_call -> SMA LPAREN NUMBER RPAREN .
+
+    LT              reduce using rule 18 (function_call -> SMA LPAREN NUMBER RPAREN .)
+    LE              reduce using rule 18 (function_call -> SMA LPAREN NUMBER RPAREN .)
+    GT              reduce using rule 18 (function_call -> SMA LPAREN NUMBER RPAREN .)
+    GE              reduce using rule 18 (function_call -> SMA LPAREN NUMBER RPAREN .)
+    EQ              reduce using rule 18 (function_call -> SMA LPAREN NUMBER RPAREN .)
+    AND             reduce using rule 18 (function_call -> SMA LPAREN NUMBER RPAREN .)
+    OR              reduce using rule 18 (function_call -> SMA LPAREN NUMBER RPAREN .)
+    $end            reduce using rule 18 (function_call -> SMA LPAREN NUMBER RPAREN .)
+    RPAREN          reduce using rule 18 (function_call -> SMA LPAREN NUMBER RPAREN .)
+    COMMA           reduce using rule 18 (function_call -> SMA LPAREN NUMBER RPAREN .)
+
+
+state 47
+
+    (19) function_call -> EMA LPAREN NUMBER RPAREN .
+
+    LT              reduce using rule 19 (function_call -> EMA LPAREN NUMBER RPAREN .)
+    LE              reduce using rule 19 (function_call -> EMA LPAREN NUMBER RPAREN .)
+    GT              reduce using rule 19 (function_call -> EMA LPAREN NUMBER RPAREN .)
+    GE              reduce using rule 19 (function_call -> EMA LPAREN NUMBER RPAREN .)
+    EQ              reduce using rule 19 (function_call -> EMA LPAREN NUMBER RPAREN .)
+    AND             reduce using rule 19 (function_call -> EMA LPAREN NUMBER RPAREN .)
+    OR              reduce using rule 19 (function_call -> EMA LPAREN NUMBER RPAREN .)
+    $end            reduce using rule 19 (function_call -> EMA LPAREN NUMBER RPAREN .)
+    RPAREN          reduce using rule 19 (function_call -> EMA LPAREN NUMBER RPAREN .)
+    COMMA           reduce using rule 19 (function_call -> EMA LPAREN NUMBER RPAREN .)
+
+
+state 48
+
+    (20) function_call -> RSI LPAREN NUMBER RPAREN .
+
+    LT              reduce using rule 20 (function_call -> RSI LPAREN NUMBER RPAREN .)
+    LE              reduce using rule 20 (function_call -> RSI LPAREN NUMBER RPAREN .)
+    GT              reduce using rule 20 (function_call -> RSI LPAREN NUMBER RPAREN .)
+    GE              reduce using rule 20 (function_call -> RSI LPAREN NUMBER RPAREN .)
+    EQ              reduce using rule 20 (function_call -> RSI LPAREN NUMBER RPAREN .)
+    AND             reduce using rule 20 (function_call -> RSI LPAREN NUMBER RPAREN .)
+    OR              reduce using rule 20 (function_call -> RSI LPAREN NUMBER RPAREN .)
+    $end            reduce using rule 20 (function_call -> RSI LPAREN NUMBER RPAREN .)
+    RPAREN          reduce using rule 20 (function_call -> RSI LPAREN NUMBER RPAREN .)
+    COMMA           reduce using rule 20 (function_call -> RSI LPAREN NUMBER RPAREN .)
+
+
+state 49
+
+    (17) function_call -> CROSSOVER LPAREN expression COMMA expression . RPAREN
+    (12) expression -> expression . LT expression
+    (13) expression -> expression . LE expression
+    (14) expression -> expression . GT expression
+    (15) expression -> expression . GE expression
+    (16) expression -> expression . EQ expression
+
+    RPAREN          shift and go to state 50
+    LT              shift and go to state 22
+    LE              shift and go to state 23
+    GT              shift and go to state 24
+    GE              shift and go to state 25
+    EQ              shift and go to state 26
+
+
+state 50
+
+    (17) function_call -> CROSSOVER LPAREN expression COMMA expression RPAREN .
+
+    LT              reduce using rule 17 (function_call -> CROSSOVER LPAREN expression COMMA expression RPAREN .)
+    LE              reduce using rule 17 (function_call -> CROSSOVER LPAREN expression COMMA expression RPAREN .)
+    GT              reduce using rule 17 (function_call -> CROSSOVER LPAREN expression COMMA expression RPAREN .)
+    GE              reduce using rule 17 (function_call -> CROSSOVER LPAREN expression COMMA expression RPAREN .)
+    EQ              reduce using rule 17 (function_call -> CROSSOVER LPAREN expression COMMA expression RPAREN .)
+    AND             reduce using rule 17 (function_call -> CROSSOVER LPAREN expression COMMA expression RPAREN .)
+    OR              reduce using rule 17 (function_call -> CROSSOVER LPAREN expression COMMA expression RPAREN .)
+    $end            reduce using rule 17 (function_call -> CROSSOVER LPAREN expression COMMA expression RPAREN .)
+    RPAREN          reduce using rule 17 (function_call -> CROSSOVER LPAREN expression COMMA expression RPAREN .)
+    COMMA           reduce using rule 17 (function_call -> CROSSOVER LPAREN expression COMMA expression RPAREN .)
 
