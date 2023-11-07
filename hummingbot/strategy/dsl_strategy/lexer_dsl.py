@@ -68,7 +68,7 @@ def t_GT(t):
     r'>'
     return t
 
-# Number token rule with conversion to integer
+# Number TOKEN rule with conversion to integer
 def t_NUMBER(t):
     r'\d+(\.\d+)?'
     t.value = float(t.value) if '.' in t.value else int(t.value)  # Convert string to a number (float if it contains a period)
