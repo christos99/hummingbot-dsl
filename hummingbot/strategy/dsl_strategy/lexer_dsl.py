@@ -45,7 +45,7 @@ t_BALANCE = r'(?i)\bbalance\b'
 t_COMMA = r','
 
 # Regular expressions for comparison operators using literals
-literals = ['<', '>', '(', ')', '=', '+', '-', '*', '/']
+literals = ['<', '>', '=', '+', '-', '*', '/']
 
 # More complex token regex rules
 def t_LE(t):
@@ -66,6 +66,14 @@ def t_LT(t):
 
 def t_GT(t):
     r'>'
+    return t
+
+def t_LPAREN(t):
+    r"""\("""
+    return t
+
+def t_RPAREN(t):
+    r"""\)"""
     return t
 
 # Number TOKEN rule with conversion to integer
