@@ -34,4 +34,4 @@ def run_pipeline_tests(test_cases, lexer, parser):
             print(f"Unexpected error in parser: {e}")
 
 # Execute the tests
-run_pipeline_tests(error_handling_tests, lexer, parser)
+run_pipeline_tests(correct_syntax_tests, lexer, parser)
