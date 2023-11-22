@@ -2,7 +2,7 @@
 
 ## Steps Taken
 
-### 1. Parsing and Validating Strategy (`validator.py`)
+### 1. Parsing and Validating Strategy (`validate.py`)
 - **Purpose:** To parse and validate a trading strategy defined in a YAML file.
 - **Key Components:**
   - Loading and parsing YAML data.
