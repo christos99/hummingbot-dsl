@@ -1,5 +1,5 @@
-
 import yaml
+
 
 def load_yaml(file_path):
     try:
@@ -12,6 +12,7 @@ def load_yaml(file_path):
         print(f"Error parsing YAML: {exc}")
         exit(1)
 
+
 def validate_strategy(strategy):
     if not strategy.get('name'):
         return {"valid": False, "message": "Strategy name is missing"}
@@ -20,6 +21,7 @@ def validate_strategy(strategy):
     # Add more validation rules as needed
     return {"valid": True, "message": "Strategy is valid"}
 
+
 def validate_market(market):
     if not market.get('connector'):
         return {"valid": False, "message": "Market connector is missing"}
@@ -27,6 +29,7 @@ def validate_market(market):
         return {"valid": False, "message": "Market pairs are missing"}
     # Add more validation rules as needed
     return {"valid": True, "message": "Market is valid"}
+
 
 def main():
     yaml_data = load_yaml('strategy.yaml')
@@ -39,6 +42,7 @@ def main():
     for market in yaml_data['strategy_model'].get('markets', []):
         market_result = validate_market(market)
         print(f"Market validation: {market_result['message']}")
+
 
 if __name__ == '__main__':
     main()

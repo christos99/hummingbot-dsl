@@ -1,52 +1,6 @@
-
 strategy_model:
-  name: <strategy_name>
-  version: "<version>"
-  type: <StrategyBase | Script | PMM | LM>
-  author: "<author_name>"
-  author_email: "<author_email>"
-  description: "<description>"
-  labels:
-    - "<label1>"
-    - "<label2>"
+  name: "MyStrategy"
+  version: "1.0"
   markets:
-    - market:
-        connector: <binance | kucoin | ascent_ex | gate_io>
-        pairs:
-          - "<pair1>"
-          - "<pair2>"
-  parameters:
-    - parameter:
-        name: <parameter_name>
-        type: <int | float | str | bool | list | dict>
-        description: "<description>"
-        prompt_msg: "<prompt_message>"
-        default: <default_value>
-        keyword: "<keyword>"
-        dynamic_reconfigure: <true | false>
-        prompt_on_new: <true | false>
-
-# Example of an exchange specific configuration
-binance_exchange:
-  apiKey: "<api_key>"
-  apiSecret: "<api_secret>"
-
-ascent_ex_exchange:
-  apiKey: "<api_key>"
-  apiSecret: "<api_secret>"
-
-gate_io_exchange:
-  apiKey: "<api_key>"
-  apiSecret: "<api_secret>"
-
-# Example of a parameter value
-parameter_value:
-  - string_value: "<string>"
-  - number_value: <number>
-  - bool_value: <true | false>
-  - list_value:
-      - <value1>
-      - <value2>
-  - dict_value:
-      key1: <value1>
-      key2: <value2>
+    - connector: "binance"
+      pairs: ["BTC/USD", "ETH/USD"]

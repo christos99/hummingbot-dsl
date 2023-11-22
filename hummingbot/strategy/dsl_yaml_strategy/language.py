@@ -47,7 +47,7 @@ def parse_strategy(data):
         exit(1)
 
 def main():
-    yaml_data = load_yaml('strategy.yaml')
+    yaml_data = load_yaml('strategy_2.yaml')
     strategy = parse_strategy(yaml_data['strategy_model'])
     # Process the strategy object as needed
 
