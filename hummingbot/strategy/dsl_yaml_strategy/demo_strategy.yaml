@@ -1,0 +1,27 @@
+
+strategy_model:
+  name: "SampleStrategy"
+  version: "1.0"
+  type: "PMM"
+  author: "Jane Doe"
+  author_email: "jane.doe@example.com"
+  description: "A sample strategy for demonstration purposes."
+  labels:
+    - "demo"
+    - "test"
+  markets:
+    - market:
+        connector: "binance"
+        pairs:
+          - "BTC-USD"
+          - "ETH-USD"
+  parameters:
+    - parameter:
+        name: "order_size"
+        type: "float"
+        description: "Size of the order"
+        prompt_msg: "Enter the size of the order"
+        default: 1.5
+        keyword: "size"
+        dynamic_reconfigure: false
+        prompt_on_new: true
