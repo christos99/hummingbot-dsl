@@ -1,4 +1,8 @@
 import yaml
+import argparse
+
+# Import the necessary function from language.py
+from language import main as parse_strategy
 
 
 def load_yaml(file_path):
@@ -20,9 +24,10 @@ def validate_strategy(strategy):
             return {"valid": False, "message": f"Strategy {field} is missing"}
 
     # Validate strategy type
-    valid_types = ['StrategyBase', 'Script', 'PMM', 'LM']
-    if strategy['type'] not in valid_types:
-        return {"valid": False, "message": f"Invalid strategy type: {strategy['type']}"}
+    valid_types = ['STRATEGYBASE', 'SCRIPT', 'PMM', 'LM']
+    strategy_type_upper = strategy['type'].upper()  # Convert the input type to uppercase
+    if strategy_type_upper not in valid_types:
+        return {"valid": False, "message": f"Invalid strategy type: {strategy['type']}. Valid types are: {', '.join(valid_types)}"}
 
     # Add more specific validations as needed
     return {"valid": True, "message": "Strategy is valid"}
@@ -56,24 +61,36 @@ def validate_parameter(parameter):
     return {"valid": True, "message": "Parameter is valid"}
 
 
-def main():
-    yaml_data = load_yaml('/Users/christos/hummingbot-dsl/hummingbot/strategy/dsl_yaml_strategy/nikas.yaml')
+def main(file_path):
+    # Use the parse_strategy function from language.py with the provided file path
+    strategy = parse_strategy(file_path)
+    if not strategy:
+        print("Failed to parse strategy.")
+        return
 
-    # Validate strategy
-    strategy_result = validate_strategy(yaml_data['strategy_model'])
+    # Convert the strategy object to a dictionary for validation
+    strategy_dict = strategy.to_dict()
+
+    # Validate the parsed strategy
+    strategy_result = validate_strategy(strategy_dict)
     print(f"Strategy validation: {strategy_result['message']}")
 
     # Validate each market
-    for market in yaml_data['strategy_model'].get('markets', []):
-        market_result = validate_market(market['market'])
+    for market in strategy_dict.get('markets', []):
+        market_result = validate_market(market)
         print(f"Market validation: {market_result['message']}")
 
     # Validate each parameter
-    for parameter in yaml_data['strategy_model'].get('parameters', []):
-        parameter_result = validate_parameter(parameter['parameter'])
+    for parameter in strategy_dict.get('parameters', []):
+        parameter_result = validate_parameter(parameter)
         print(f"Parameter validation: {parameter_result['message']}")
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description="Validate a strategy YAML file")
+    parser.add_argument('file_path', help="Path to the strategy YAML file")
+    args = parser.parse_args()
+
+    main(args.file_path)
+
 
 
