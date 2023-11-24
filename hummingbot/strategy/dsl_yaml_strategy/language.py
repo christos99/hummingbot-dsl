@@ -65,7 +65,7 @@ class Market:
         self.pairs = [pair.upper() for pair in pairs]
 
     def display(self):
-        print(f"Market: {self.connector}, Pairs: {', '.join(self.pairs)}")
+        print(f"Market: {self.connector[0].upper() + self.connector[1:].lower()}, Pairs: {', '.join(self.pairs)}")
 
     def to_dict(self):
         return {

@@ -24,10 +24,9 @@ def validate_strategy(strategy):
             return {"valid": False, "message": f"Strategy {field} is missing"}
 
     # Validate strategy type
-    valid_types = ['STRATEGYBASE', 'SCRIPT', 'PMM', 'LM']
-    strategy_type_upper = strategy['type'].upper()  # Convert the input type to uppercase
-    if strategy_type_upper not in valid_types:
-        return {"valid": False, "message": f"Invalid strategy type: {strategy['type']}. Valid types are: {', '.join(valid_types)}"}
+    valid_types = ['StrategyBase', 'Script', 'PMM', 'LM']
+    if strategy['type'] not in valid_types:
+        return {"valid": False, "message": f"Invalid strategy type: {strategy['type']}"}
 
     # Add more specific validations as needed
     return {"valid": True, "message": "Strategy is valid"}
