@@ -1,0 +1,17 @@
+strategy_model:
+  author: CHRISTOS
+  author_email: NIKAS
+  description: NIKAS
+  labels:
+  - NIKAS
+  - NIKAS
+  markets:
+  - market:
+      connector: binance
+      pairs:
+      - btc
+      - eth
+  name: manolis
+  parameters: []
+  type: StrategyBase
+  version: '1'

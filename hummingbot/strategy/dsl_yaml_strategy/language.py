@@ -1,5 +1,6 @@
 import yaml
 
+
 class Strategy:
     def __init__(self, name, version, type, author, author_email, description, labels, markets, parameters):
         self.name = name
@@ -13,11 +14,15 @@ class Strategy:
         self.parameters = parameters
 
     def display(self):
-        print(f"Strategy: {self.name}, Version: {self.version}, Type: {self.type}")
+        print(
+            f"Strategy: {self.name}, Version: {self.version}, Type: {self.type}, Author: {self.author}, Email: {self.author_email}")
+        print(f"Description: {self.description}")
+        print("Labels: " + ", ".join(self.labels))
         for market in self.markets:
             market.display()
         for parameter in self.parameters:
             parameter.display()
+
 
 class Market:
     def __init__(self, connector, pairs):
@@ -25,7 +30,8 @@ class Market:
         self.pairs = pairs
 
     def display(self):
-        print(f"Market: {self.connector}, Pairs: {self.pairs}")
+        print(f"Market: {self.connector}, Pairs: {', '.join(self.pairs)}")
+
 
 class Parameter:
     def __init__(self, name, type, description, prompt_msg, default, keyword, dynamic_reconfigure, prompt_on_new):
@@ -39,12 +45,18 @@ class Parameter:
         self.prompt_on_new = prompt_on_new
 
     def display(self):
-        print(f"Parameter: {self.name}, Type: {self.type}, Default: {self.default}")
+        print(
+            f"Parameter: {self.name}, Type: {self.type}, Description: {self.description}, Default: {self.default}, Keyword: {self.keyword}, Dynamic Reconfigure: {self.dynamic_reconfigure}, Prompt on New: {self.prompt_on_new}")
+
 
 class ExchangeConfig:
     def __init__(self, apiKey, apiSecret):
         self.apiKey = apiKey
         self.apiSecret = apiSecret
+
+    def display(self):
+        print(f"Exchange API Key: {self.apiKey}, Secret: {self.apiSecret}")
+
 
 def load_yaml(file_path):
     try:
@@ -57,22 +69,31 @@ def load_yaml(file_path):
         print(f"Error parsing YAML: {exc}")
         return None
 
+
 def parse_strategy(data):
     if not data:
         print("Invalid strategy data format")
         return None
 
     markets = [Market(m['market']['connector'], m['market']['pairs']) for m in data.get('markets', [])]
-    parameters = [Parameter(p['parameter']['name'], p['parameter']['type'], p['parameter']['description'], p['parameter']['prompt_msg'], p['parameter']['default'], p['parameter']['keyword'], p['parameter']['dynamic_reconfigure'], p['parameter']['prompt_on_new']) for p in data.get('parameters', [])]
+    parameters = [Parameter(p['parameter']['name'], p['parameter']['type'], p['parameter']['description'],
+                            p['parameter']['prompt_msg'], p['parameter']['default'], p['parameter']['keyword'],
+                            p['parameter']['dynamic_reconfigure'], p['parameter']['prompt_on_new']) for p in
+                  data.get('parameters', [])]
 
-    return Strategy(data['name'], data['version'], data['type'], data.get('author', ''), data.get('author_email', ''), data.get('description', ''), data.get('labels', []), markets, parameters)
+    return Strategy(data['name'], data['version'], data['type'], data.get('author', ''), data.get('author_email', ''),
+                    data.get('description', ''), data.get('labels', []), markets, parameters)
+
 
 def main():
-    yaml_data = load_yaml('/Users/christos/hummingbot-dsl/hummingbot/strategy/dsl_yaml_strategy/demo_strategy.yaml')  # Replace with your actual file path
+    yaml_data = load_yaml(
+        '/Users/christos/hummingbot-dsl/hummingbot/strategy/dsl_yaml_strategy/nikas.yaml')  # Replace with your actual file path
     if yaml_data:
         strategy = parse_strategy(yaml_data['strategy_model'])
         if strategy:
-            strategy.display()  # Replace with your desired processing or output format
+            return strategy  # Instead of just displaying, return the strategy object
+    return None
+
 
 if __name__ == '__main__':
     main()

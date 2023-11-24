@@ -57,7 +57,7 @@ def validate_parameter(parameter):
 
 
 def main():
-    yaml_data = load_yaml('strategy_2.yaml')
+    yaml_data = load_yaml('/Users/christos/hummingbot-dsl/hummingbot/strategy/dsl_yaml_strategy/nikas.yaml')
 
     # Validate strategy
     strategy_result = validate_strategy(yaml_data['strategy_model'])

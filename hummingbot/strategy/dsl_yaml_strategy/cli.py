@@ -1,4 +1,3 @@
-
 import argparse
 import yaml
 import sys
@@ -95,12 +94,7 @@ def main():
         print(strategy)
     elif args.action == 'save':
         if args.file:
-            if temp_strategy is None:
-                print("No strategy created. Use 'create' first.")
-                return
-            save_strategy(args.file, temp_strategy)
-            print(f"Strategy saved to {args.file}")
-            temp_strategy = None  # Clear the temporary storage
+            save_strategy(args.file)
         else:
             print("Please specify a file path with -f or --file")
 
