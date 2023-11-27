@@ -21,7 +21,7 @@ def generate_script(strategy, template_dir='templates', output_dir='output'):
         print(f"Error writing to file: {e}")
 
 def main():
-    yaml_data = load_yaml('strategy_2.yaml')
+    yaml_data = load_yaml('yaml_files/strategy_2.yaml')
     strategy_result = validate_strategy(yaml_data['strategy_model'])
 
     if strategy_result['valid']:

@@ -5,16 +5,16 @@ import argparse
 from language import main as parse_strategy
 
 
-def load_yaml(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            return yaml.safe_load(file)
-    except FileNotFoundError:
-        print(f"File not found: {file_path}")
-        exit(1)
-    except yaml.YAMLError as exc:
-        print(f"Error parsing YAML: {exc}")
-        exit(1)
+# def load_yaml(file_path):
+#     try:
+#         with open(file_path, 'r') as file:
+#             return yaml.safe_load(file)
+#     except FileNotFoundError:
+#         print(f"File not found: {file_path}")
+#         exit(1)
+#     except yaml.YAMLError as exc:
+#         print(f"Error parsing YAML: {exc}")
+#         exit(1)
 
 
 def validate_strategy(strategy):
@@ -59,20 +59,33 @@ def validate_parameter(parameter):
     # Add more specific validations as needed
     return {"valid": True, "message": "Parameter is valid"}
 
+def save_yaml(strategy_dict, output_file_path):
+    """
+    Saves the validated strategy dictionary to a YAML file.
+    """
+    try:
+        with open(output_file_path, 'w') as file:
+            yaml.dump(strategy_dict, file)
+        print(f"Validated strategy saved to: {output_file_path}")
+    except Exception as e:
+        print(f"Error saving file: {e}")
+
 
 def main(file_path):
     # Use the parse_strategy function from language.py with the provided file path
     strategy = parse_strategy(file_path)
     if not strategy:
         print("Failed to parse strategy.")
-        return
+        return None
 
     # Convert the strategy object to a dictionary for validation
     strategy_dict = strategy.to_dict()
 
     # Validate the parsed strategy
     strategy_result = validate_strategy(strategy_dict)
-    print(f"Strategy validation: {strategy_result['message']}")
+    if not strategy_result['valid']:
+        print(f"Strategy validation failed: {strategy_result['message']}")
+        return None
 
     # Validate each market
     for market in strategy_dict.get('markets', []):
@@ -83,6 +96,16 @@ def main(file_path):
     for parameter in strategy_dict.get('parameters', []):
         parameter_result = validate_parameter(parameter)
         print(f"Parameter validation: {parameter_result['message']}")
+
+    # Wrap the strategy_dict in a parent dictionary with 'strategy_model' as the key
+    wrapped_strategy_dict = {'strategy_model': strategy_dict}
+
+    # Save the validated strategy data to the new file
+    base_name = file_path.rsplit('.', 1)[0]  # This removes the extension
+    output_file_path = f"{base_name}_validated.yaml"
+    save_yaml(wrapped_strategy_dict, output_file_path)
+    return output_file_path
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Validate a strategy YAML file")
