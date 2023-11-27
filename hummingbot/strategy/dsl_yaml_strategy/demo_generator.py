@@ -18,7 +18,7 @@ def generate_script(file_path):
         strategy_data = yaml.safe_load(file)['strategy_model']
 
     # Setup Jinja2 environment
-    env = Environment(loader=FileSystemLoader('./templates'))  # Template in current directory
+    env = Environment(loader=FileSystemLoader('./templates'))  # Template in the templates directory
     template = env.get_template('strategy_template.j2')
 
     # Render the template with strategy data
