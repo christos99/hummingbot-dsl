@@ -1,8 +1,7 @@
-"""
-    This is a {{ strategy.type }} strategy generated using the hbot-strategy-dsl
-    Description: {{ strategy.description }}
-    Author: {{ strategy.author }}
-"""
+# This is a StrategyBase strategy generated using the hbot-strategy-dsl #
+
+# Description: A sample strategy for demonstration purposes.
+# Author: Jane Doe
 
 import time
 import logging
@@ -17,22 +16,22 @@ from hummingbot.core.rate_oracle.rate_oracle import RateOracle
 from hummingbot.strategy.script_strategy_base import ScriptStrategyBase
 
 
-class {{ strategy.name }}(ScriptStrategyBase):
+class SampleStrategy(ScriptStrategyBase):
     """
-    {{ strategy.description }}
+    A sample strategy for demonstration purposes.
 
     For methods provided by the ScriptStrategyBase class visit:
         feat/script_strategy/hummingbot/strategy/script_strategy_base.py
     """
 
-{% for param in strategy.parameters %}
-    {{ param.name }}: {{ param.type }} = {{ param.defaultValue }}
-{% endfor %}
+
+    order_size: float = 
+
 
     markets =  {
-{% for market in strategy.markets %}
-        '{{ market.connector }}': {{ market.pairs }},
-{% endfor %}
+
+        'binance': ['BTC-USD', 'ETH-USD'],
+
     }
 
     @property
