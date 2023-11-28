@@ -20,13 +20,10 @@ from hummingbot.strategy.script_strategy_base import ScriptStrategyBase
 class {{ strategy.name }}(ScriptStrategyBase):
     """
     {{ strategy.description }}
-
-    For methods provided by the ScriptStrategyBase class visit:
-        feat/script_strategy/hummingbot/strategy/script_strategy_base.py
     """
 
 {% for param in strategy.parameters %}
-    {{ param.name }}: {{ param.type }} = {{ param.defaultValue }}
+    {{ param.name }}: {{ param.type }} = {{ param.default }}
 {% endfor %}
 
     markets =  {

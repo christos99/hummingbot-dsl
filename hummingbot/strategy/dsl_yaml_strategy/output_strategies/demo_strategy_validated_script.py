@@ -1,7 +1,8 @@
-# This is a StrategyBase strategy generated using the hbot-strategy-dsl #
-
-# Description: A sample strategy for demonstration purposes.
-# Author: Jane Doe
+"""
+    This is a StrategyBase strategy generated using the hbot-strategy-dsl
+    Description: A sample strategy for demonstration purposes.
+    Author: Jane Doe
+"""
 
 import time
 import logging
@@ -19,13 +20,10 @@ from hummingbot.strategy.script_strategy_base import ScriptStrategyBase
 class SampleStrategy(ScriptStrategyBase):
     """
     A sample strategy for demonstration purposes.
-
-    For methods provided by the ScriptStrategyBase class visit:
-        feat/script_strategy/hummingbot/strategy/script_strategy_base.py
     """
 
 
-    order_size: float = 
+    order_size: float = 1.5
 
 
     markets =  {

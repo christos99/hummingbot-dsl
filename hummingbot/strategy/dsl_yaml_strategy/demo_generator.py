@@ -19,7 +19,7 @@ def generate_script(file_path):
 
     # Setup Jinja2 environment
     env = Environment(loader=FileSystemLoader('./templates'))  # Template in the templates directory
-    template = env.get_template('strategy_template.j2')
+    template = env.get_template('strategy_template_v2.j2')
 
     # Render the template with strategy data
     rendered_script = template.render(strategy=strategy_data)
@@ -37,5 +37,5 @@ def generate_script(file_path):
 
 
 if __name__ == "__main__":
-    input_file_path = '/Users/christos/hummingbot-dsl/hummingbot/strategy/dsl_yaml_strategy/yaml_files/demo_strategy.yaml'
+    input_file_path = '/Users/christos/hummingbot-dsl/hummingbot/strategy/dsl_yaml_strategy/yaml_files/demo_strategy_2.yaml'
     generate_script(input_file_path)
