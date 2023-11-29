@@ -77,7 +77,7 @@ class Market:
 class Parameter:
     def __init__(self, name, type, description, prompt_msg, default, keyword, dynamic_reconfigure, prompt_on_new):
         self.name = name
-        self.type = type
+        self.type = self._convert_type(type)
         self.description = description
         self.prompt_msg = prompt_msg
         self.default = default
@@ -86,7 +86,17 @@ class Parameter:
         self.prompt_on_new = self._convert_to_boolean(prompt_on_new)
 
     @staticmethod
+    def _convert_type(type):
+        if type == 'decimal':
+            return 'float'
+        return type
+
+    @staticmethod
     def _convert_to_boolean(value):
+        # If the value is None (parameter is missing), return None or a default value
+        if value is None:
+            return False  # or return False if you want to default to False
+
         # Convert different string capitalizations to boolean
         if isinstance(value, str):
             if value.lower() == 'true':
@@ -94,7 +104,7 @@ class Parameter:
             elif value.lower() == 'false':
                 return False
             else:
-                raise ValueError("Value must be a boolean (True/False)")
+                raise ValueError("Value must be a boolean (true/false)")
         elif isinstance(value, bool):
             return value
         else:
@@ -148,14 +158,33 @@ def parse_strategy(data):
         print("Invalid strategy data format")
         return None
 
-    markets = [Market(m['market']['connector'], m['market']['pairs']) for m in data.get('markets', [])]
-    parameters = [Parameter(p['parameter']['name'], p['parameter']['type'], p['parameter']['description'],
-                            p['parameter']['prompt_msg'], p['parameter']['default'], p['parameter']['keyword'],
-                            p['parameter']['dynamic_reconfigure'], p['parameter']['prompt_on_new']) for p in
-                  data.get('parameters', [])]
+    # Handle missing 'markets' and 'parameters' keys
+    markets_data = data.get('markets', [])
+    parameters_data = data.get('parameters', [])
 
-    return Strategy(data['name'], data['version'], data['type'], data.get('author', ''), data.get('author_email', ''),
-                    data.get('description', ''), data.get('labels', []), markets, parameters)
+    markets = [Market(m.get('market', {}).get('connector', None), m.get('market', {}).get('pairs', [])) for m in markets_data]
+    parameters = [Parameter(
+        p.get('parameter', {}).get('name', None),
+        p.get('parameter', {}).get('type', None),
+        p.get('parameter', {}).get('description', None),
+        p.get('parameter', {}).get('prompt_msg', None),
+        p.get('parameter', {}).get('default', None),
+        p.get('parameter', {}).get('keyword', None),
+        p.get('parameter', {}).get('dynamic_reconfigure', None),
+        p.get('parameter', {}).get('prompt_on_new', None)
+    ) for p in parameters_data]
+
+    return Strategy(
+        data.get('name', None),
+        data.get('version', None),
+        data.get('type', None),
+        data.get('author', ''),
+        data.get('author_email', ''),
+        data.get('description', ''),
+        data.get('labels', []),
+        markets,
+        parameters
+    )
 
 
 def main(file_path):

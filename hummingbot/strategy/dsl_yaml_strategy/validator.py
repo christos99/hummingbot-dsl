@@ -18,7 +18,7 @@ from language import main as parse_strategy
 
 
 def validate_strategy(strategy):
-    required_fields = ['name', 'version', 'type', 'author', 'author_email', 'description', 'labels', 'markets']
+    required_fields = ['name', 'type', 'author', 'description', 'markets']
     for field in required_fields:
         if not strategy.get(field):
             return {"valid": False, "message": f"Strategy {field} is missing"}

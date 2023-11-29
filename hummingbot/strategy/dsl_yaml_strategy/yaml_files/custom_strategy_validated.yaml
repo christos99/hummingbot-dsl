@@ -1,0 +1,30 @@
+strategy_model:
+  author: Jane Doe
+  author_email: jane.doe@example.com
+  description: A strategy with a custom price calculation method.
+  labels:
+  - demo
+  - test
+  markets:
+  - connector: binance
+    pairs:
+    - BTC-USD
+    - ETH-USD
+  name: CustomPriceStrategy
+  parameters:
+  - default: '# Default price calculation logic
+
+      price = self.mid_price * Decimal(''1.01'')
+
+      return price
+
+      '
+    description: Custom logic for price calculation
+    dynamic_reconfigure: false
+    keyword: customPriceLogic
+    name: custom_price_logic
+    prompt_msg: Enter your custom logic for price calculation
+    prompt_on_new: true
+    type: str
+  type: PMM
+  version: 1.0

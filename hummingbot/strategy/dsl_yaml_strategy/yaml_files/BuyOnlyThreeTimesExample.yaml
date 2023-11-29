@@ -1,0 +1,36 @@
+strategy_model:
+  name: "BuyOnlyThreeTimesExample"
+  version: "1.0"
+  type: "Script"
+  author: "Christos"
+  description: "A strategy to place only three buy orders."
+  parameters:
+    - parameter:
+        name: "order_amount_usd"
+        type: "decimal"
+        description: "Amount in USD for each order"
+        default: 100
+    - parameter:
+        name: "orders_to_create"
+        type: "int"
+        description: "Total number of orders to create"
+        default: 3
+    - parameter:
+        name: "base_asset"
+        type: "str"
+        description: "Base asset symbol"
+        default: "ETH"
+    - parameter:
+        name: "quote_asset"
+        type: "str"
+        description: "Quote asset symbol"
+        default: "USDT"
+  markets:
+    - market:
+        connector: "kucoin_paper_trade"
+        pairs:
+          - "ETH-USDT"
+    - market:
+        connector: "binance_paper_trade"
+        pairs:
+          - "btc-USDT"

@@ -1,6 +1,6 @@
 import os
 import yaml
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, PackageLoader
 
 # Import the validator function from validator.py (assuming it's refactored into a callable function)
 from validator import main as validate_and_save_strategy
@@ -37,5 +37,5 @@ def generate_script(file_path):
 
 
 if __name__ == "__main__":
-    input_file_path = '/Users/christos/hummingbot-dsl/hummingbot/strategy/dsl_yaml_strategy/yaml_files/demo_strategy_2.yaml'
+    input_file_path = '/Users/christos/hummingbot-dsl/hummingbot/strategy/dsl_yaml_strategy/yaml_files/BuyOnlyThreeTimesExample.yaml'
     generate_script(input_file_path)

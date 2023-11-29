@@ -1,7 +1,7 @@
 """
-    {{ strategy.description }}
-    This {{ strategy.type }} strategy is generated with hbot-strategy-dsl.
-    Author: {{ strategy.author }}
+    A strategy with a custom price calculation method.
+    This PMM strategy is generated with hbot-strategy-dsl.
+    Author: Jane Doe
 """
 
 import logging
@@ -19,20 +19,29 @@ from hummingbot.strategy.script_strategy_base import ScriptStrategyBase
 logger = logging.getLogger(__name__)
 
 
-class {{ strategy.name }}Strategy(ScriptStrategyBase):
-    """{{ strategy.description }}"""
+class CustomPriceStrategyStrategy(ScriptStrategyBase):
+    """A strategy with a custom price calculation method."""
 
-{% for param in strategy.parameters %}
-    {{ param.name }} = {{ param.default }}  # {{ param.description }}
-{% endfor %}
+
+    
+    
+
+
 
     def __init__(self):
         super().__init__()
         self.markets = {
-{% for market in strategy.markets %}
-            "{{ market.connector }}": {{ market.pairs }},
-{% endfor %}
+
+            "binance": ['BTC-USD', 'ETH-USD'],
+
         }
+
+    def calculate_custom_price(self):
+        
+        # Default price calculation logic
+        price = self.mid_price * Decimal('1.01')
+        return price
+        
 
     def on_tick(self):
         """Main strategy operation executed periodically."""
@@ -54,4 +63,3 @@ class {{ strategy.name }}Strategy(ScriptStrategyBase):
         order_info = f"{event.trade_type.name} order of {event.amount} {event.trading_pair} at {event.price}"
         logger.info(f"Filled: {order_info}")
         self.notify_hb_app_with_timestamp(f"Filled: {order_info}")
-
