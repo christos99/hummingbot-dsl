@@ -1,0 +1,170 @@
+{%- set strategy = yaml.strategy_model -%}
+
+{%- set decimal_used = false -%}
+{%- for param in strategy.strategy_parameters -%}
+    {%- if param.type == 'Decimal' %}
+        {%- set decimal_used = true -%}
+from decimal import Decimal
+    {%- endif -%}
+{%- endfor %}
+
+{%- if strategy.type == 'Script' %}
+from hummingbot.strategy.script_strategy_base import ScriptStrategyBase
+{%- endif %}
+
+{%- if strategy.candlestick_configuration.candles %}
+# Import necessary Candles files
+from hummingbot.data_feed.candles_feed.candles_factory import CandlesFactory, CandlesConfig
+{%- endif %}
+
+# Import smart components and other necessary modules
+{%- for component in strategy.smart_components %}
+from hummingbot.smart_components.{{ component.name }} import {{ component.name }}Config, {{ component.name }}
+{%- endfor %}
+
+class {{ strategy.name }}(ScriptStrategyBase):
+    """
+    {{ strategy.description }}
+    """
+
+    # Strategy parameters
+    {% for param in strategy.strategy_parameters %}
+    {% if param.type == 'Decimal' %}
+    {{ param.name }} = Decimal("{{ param.default }}")
+    {% else %}
+    {{ param.name }}: {{ param.type }} = {{ param.default }}
+    {% endif %}
+    {% endfor %}
+
+
+    {% if strategy.position_parameters %}
+    # Position parameters
+    {% for param in strategy.position_parameters %}
+    {{ param.name }}: {{ param.type }} = {{ param.default }}
+    {% endfor %}
+    {% endif %}
+
+
+    {% if strategy.candlestick_configuration.candles %}
+    # Candlestick configuration
+    candles = [
+        {%- for candle in strategy.candlestick_configuration.candles -%}
+        CandlesFactory.get_candle(connector="{{ candle.config.connector }}", trading_pair="{{ candle.config.trading_pair }}", interval="{{ candle.config.interval }}", max_records={{ candle.config.max_records }})
+        {%- endfor -%}
+    ]
+    {% endif %}
+
+    # Markets configuration
+    markets = {"{{ strategy.exchanges[0].name }}": {
+        {%- for pair in strategy.trading_pairs.pairs -%}
+        "{{ pair.name }}",
+        {%- endfor -%}}}
+
+
+
+
+
+
+    def __init__(self):
+        super().__init__()
+
+        # Initialize exchanges and trading pairs
+        {% if strategy.exchanges %}
+        self.exchanges = {
+            {% for exchange in strategy.exchanges %}
+            "{{ exchange.name }}": {
+                "api_key": "{{ exchange.apiKey }}",
+                "api_secret": "{{ exchange.apiSecret }}"
+            },
+            {% endfor %}
+        }
+        {% endif %}
+
+        # Initialize trading pairs
+        {% if strategy.trading_pairs %}
+        {% set trading_pairs = strategy.trading_pairs.pairs %}
+        self.trading_pairs = [
+        {%- for pair in strategy.trading_pairs.pairs %}
+        "{{ pair.name }}"{{ "," if not loop.last }}
+        {%- endfor -%}
+        ]
+
+
+        {% endif -%}
+
+        # Initialize smart components
+        {% for component in strategy.smart_components %}
+        self.{{ component.name|lower }} = {{ component.name }}({{ component.config }})
+        {% endfor -%}
+
+
+        # Custom methods
+        {% for method in strategy.methods +%}
+    def {{ method.name }}(self):
+                {{ method.implementation -}}
+
+            {%+ endfor %}
+
+        # Execution logic
+{% if strategy.execution_logic %}
+# Implement the logic based on the execution logic specified in the YAML
+# Entry conditions
+{% if strategy.execution_logic.entry_conditions %}
+    {% for condition in strategy.execution_logic.entry_conditions %}
+        {% if condition.component == "RSIStrategyComponent" %}
+            # Check RSI condition for entry
+            if rsi_value {{ condition.condition }}:
+                # Execute entry action here
+        {% endif %}
+        {% if condition.component == "OtherComponent" %}
+            # Check other condition for entry
+            if other_value {{ condition.condition }}:
+                # Execute entry action here
+        {% endif %}
+        # Add more conditions as needed
+    {% endfor %}
+{% endif %}
+
+# Exit conditions
+{% if strategy.execution_logic.exit_conditions %}
+    {% for condition in strategy.execution_logic.exit_conditions %}
+        {% if condition.component == "RSIStrategyComponent" %}
+            # Check RSI condition for exit
+            if rsi_value {{ condition.condition }}:
+                # Execute exit action here
+        {% endif %}
+        {% if condition.component == "OtherComponent" %}
+            # Check other condition for exit
+            if other_value {{ condition.condition }}:
+                # Execute exit action here
+        {% endif %}
+        # Add more conditions as needed
+    {% endfor %}
+{% endif %}
+{% endif %}
+
+
+        # Indicators
+        {% if strategy.indicators %}
+        # Initialize indicators as per the YAML configuration
+        # ...
+        {% endif %}
+
+        # Order types
+        {% if strategy.order_types %}
+        # Configure order types
+        # ...
+        {% endif %}
+
+        # Strategy conditions
+        {% if strategy.strategy_conditions %}
+        # Implement conditions like stop loss, take profit, etc.
+        # ...
+        {% endif %}
+
+    # Implement the on_tick method
+    def on_tick(self):
+        # Custom logic for on_tick
+        pass
+
+    # Additional methods and custom logic can be added here

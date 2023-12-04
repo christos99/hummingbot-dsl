@@ -19,7 +19,6 @@ strategy_model:
       - name: "<pair1>"
         base_asset: str
         quote_asset: str
-        description: "Primary trading pair."
 
 
   strategy_parameters:
