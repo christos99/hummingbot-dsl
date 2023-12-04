@@ -4,15 +4,21 @@
     Author: {{ strategy.author }}
 """
 
-import logging
-import time
 from decimal import Decimal
-from typing import List
+from typing import Dict
 
-from hummingbot.connector.utils import split_hb_trading_pair
-from hummingbot.core.data_type.order_candidate import OrderCandidate
-from hummingbot.core.event.events import OrderFilledEvent, OrderType, TradeType
-from hummingbot.core.rate_oracle.rate_oracle import RateOracle
+from hummingbot.connector.connector_base import ConnectorBase, TradeType
+from hummingbot.core.data_type.common import OrderType
+from hummingbot.data_feed.candles_feed.candles_factory import CandlesConfig
+from hummingbot.smart_components.controllers.macd_bb_v1 import MACDBBV1, MACDBBV1Config
+from hummingbot.smart_components.strategy_frameworks.data_types import (
+    ExecutorHandlerStatus,
+    OrderLevel,
+    TripleBarrierConf,
+)
+from hummingbot.smart_components.strategy_frameworks.directional_trading.directional_trading_executor_handler import (
+    DirectionalTradingExecutorHandler,
+)
 from hummingbot.strategy.script_strategy_base import ScriptStrategyBase
 
 

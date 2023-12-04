@@ -1,0 +1,56 @@
+strategy:
+  name: RSISpot
+  inherits: DirectionalStrategyBase
+  description: RSI (Relative Strength Index) strategy implementation based on the DirectionalStrategyBase.
+  markets:
+    - name: MainMarket
+      exchange: binance
+      trading_pairs:
+        - ETH-USDT
+        - BTC-USDT
+
+  components:
+    - type: Candle
+      config:
+        connector: binance
+        trading_pair: ETH-USDT
+        interval: 3m
+        max_records: 1000
+
+    - type: MACD
+      config:
+        fast_period: 12
+        slow_period: 26
+        signal_period: 9
+
+    - type: RSI
+      config:
+        period: 14
+
+  order_settings:
+    order_amount_usd: "40"
+    risk_level: moderate
+    entry_strategy:
+      type: limit
+      price_distance: 0.01
+    exit_strategy:
+      stop_loss_percentage: 0.05
+      take_profit_percentage: 0.1
+
+  execution_logic:
+    entry_signal:
+      description: "Buy when RSI is below the oversold threshold."
+      conditions:
+        - indicator: RSI
+          parameter: value
+          condition: '<'
+          threshold: 30
+
+    exit_signal:
+      description: "Sell when RSI is above the overbought threshold."
+      conditions:
+        - indicator: RSI
+          parameter: value
+          condition: '>'
+          threshold: 70
+

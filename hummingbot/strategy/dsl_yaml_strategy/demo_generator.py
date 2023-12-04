@@ -19,7 +19,7 @@ def generate_script(file_path):
 
     # Setup Jinja2 environment
     env = Environment(loader=FileSystemLoader('./templates'))  # Template in the templates directory
-    template = env.get_template('strategy_template_v2.j2')
+    template = env.get_template('strategy_v1.j2')
 
     # Render the template with strategy data
     rendered_script = template.render(strategy=strategy_data)
