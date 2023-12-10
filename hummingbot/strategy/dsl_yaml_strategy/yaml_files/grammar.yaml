@@ -1,25 +1,24 @@
 strategy_model:
   name: "<strategy_name>"
   version: "<version>"
-  type: <Strategy | Script>
+  type: "<Strategy | Script>"
   author: "<author_name>"
-  author_email: "<author_email>"
-  description: "<description>"
+  description: "<brief_description_of_strategy>"
   labels:
     - "<label1>"
     - "<label2>"
-
   exchanges:
-    - name: <binance | kucoin | ascent_ex | gate_io>
+    - name: "<exchange_name>"
       apiKey: "<api_key>"
       apiSecret: "<api_secret>"
-
-  trading_pairs: # Select the trading pairs for the strategy
-    pairs:
-      - name: "<pair1>"
-        base_asset: str
-        quote_asset: str
-
+  trading_pairs:
+    - pair: "<pair1>"
+      base_asset: "<base_asset>"
+      quote_asset: "<quote_asset>"
+    - pair: "<pair2>"
+      base_asset: "<base_asset>"
+      quote_asset: "<quote_asset>"
+  # Add more trading pairs as required
 
   strategy_parameters:
     - name: "<parameter_name>"  # Identifier for the parameter
@@ -61,12 +60,66 @@ strategy_model:
         depends_on: "<dependent_parameter_name>"
         value: <dependency_value>
 
-  smart_components:
-    - name: "<component_name>"
-      config:
-        param1: <value1>
-        param2: <value2>
-        # Additional configuration parameters as needed
+  position_executors:
+    description: "Configuration for position executors in the strategy."
+    executors:
+      - name: "<executor_name>"
+        max_executors: <max_executors_number>
+        position_mode: "<HEDGE | ONE-WAY>"
+        active_executors: [ ]
+        stored_executors: [ ]
+        executor_config:
+          param1: <value1>
+          param2: <value2>
+          # Additional configuration parameters as needed
+
+  components:
+    candles:
+      - name: "candles_name"
+        config:
+          connector: "exchange_connector"
+          trading_pair: "trading_pair"
+          interval: "interval"
+          max_records: "max_candles_records"
+
+    controllers:
+      - name: "controller_name"
+        config:
+          macd_fast: "macd_fast_period"
+          macd_slow: "macd_slow_period"
+          macd_signal: "macd_signal_period"
+          bb_length: "bb_length"
+          bb_std: "bb_standard_deviation"
+
+    executors:
+      - name: "executor_name"
+        config:
+          stop_loss: "stop_loss_percentage"
+          take_profit: "take_profit_percentage"
+          time_limit: "position_time_limit"
+          trailing_stop:
+            activation_price_delta: "trailing_stop_activation_delta"
+            trailing_delta: "trailing_stop_delta"
+
+    indicators:
+      - name: "indicator_name"
+        config:
+          length: "indicator_length"
+          overbought_threshold: "indicator_ob_threshold"
+          oversold_threshold: "indicator_os_threshold"
+
+    arbitrage:
+      - name: "arbitrage_executor_name"
+        config:
+          exchange_pair_1:
+            exchange: "first_arbitrage_exchange"
+            trading_pair: "first_arbitrage_trading_pair"
+          exchange_pair_2:
+            exchange: "second_arbitrage_exchange"
+            trading_pair: "second_arbitrage_trading_pair"
+          order_amount: "arbitrage_order_amount"
+          min_profitability: "minimum_arbitrage_profitability"
+
 
 
   execution_logic:
@@ -149,22 +202,7 @@ strategy_model:
               result = some_complex_calculation(data, param1, param2)
               return result
 
-  order_types:
-    - market
-    - limit
-    - stop_limit:
-        stop_price: <stop_price_value>
-    - name: TrailingStop
-      trail_amount: <trail_value>
-      trail_type: <percentage | absolute>
-    - name: OCO
-      first_order:
-        type: limit
-        price: <price1>
-      second_order:
-        type: stop_limit
-        stop_price: <stop_price>
-        limit_price: <limit_price>
+
 
 
   strategy_conditions:
@@ -291,3 +329,20 @@ strategy_model:
 #              lines.extend([f"Candles: {self.candles[0].name} | Interval: {self.candles[0].interval}\n"])
 #              lines.extend(self.candles_formatted_list(candles_df, columns_to_show))
 #              return lines
+#  order_types:
+#    - market
+#    - limit
+#    - stop_limit:
+#        stop_price: <stop_price_value>
+#    - name: TrailingStop
+#      trail_amount: <trail_value>
+#      trail_type: <percentage | absolute>
+#    - name: OCO
+#      first_order:
+#        type: limit
+#        price: <price1>
+#      second_order:
+#        type: stop_limit
+#        stop_price: <stop_price>
+#        limit_price: <limit_price>
+
