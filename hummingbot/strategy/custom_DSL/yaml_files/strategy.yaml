@@ -1,0 +1,6 @@
+strategy_model:
+  name: "MyStrategy"
+  version: "1.0"
+  markets:
+    - connector: "binance"
+      pairs: ["BTC/USD", "ETH/USD"]

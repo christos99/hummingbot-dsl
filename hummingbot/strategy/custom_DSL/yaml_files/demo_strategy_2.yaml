@@ -1,0 +1,49 @@
+strategy_model:
+  name: "AdvancedStrategy"
+  version: 2
+  type: "Script"
+  author: "John Smith"
+  author_email: "john.smith@example.com"
+  description: "An advanced trading strategy with multiple markets and dynamic parameters."
+  labels:
+    - "advanced"
+    - "multi-market"
+  markets:
+    - market:
+        connector: "binance"
+        pairs:
+          - "btc-USD"
+          - "eth-USD"
+    - market:
+        connector: "kucoin"
+        pairs:
+          - "ltc-USD"
+          - "xrp-USD"
+  parameters:
+    - parameter:
+        name: "buy_spread"
+        type: "float"
+        description: "Spread percentage for buy orders"
+        prompt_msg: "Enter the buy spread percentage"
+        default: 0.02
+        keyword: "buySpread"
+        dynamic_reconfigure: "true"
+        prompt_on_new: "false"
+    - parameter:
+        name: "sell_spread"
+        type: "float"
+        description: "Spread percentage for sell orders"
+        prompt_msg: "Enter the sell spread percentage"
+        default: 0.02
+        keyword: "sellSpread"
+        dynamic_reconfigure: "true"
+        prompt_on_new: "false"
+    - parameter:
+        name: "order_amount"
+        type: "float"
+        description: "The amount of each order"
+        prompt_msg: "Enter the order amount"
+        default: 0.5
+        keyword: "orderAmount"
+        dynamic_reconfigure: "false"
+        prompt_on_new: "true"

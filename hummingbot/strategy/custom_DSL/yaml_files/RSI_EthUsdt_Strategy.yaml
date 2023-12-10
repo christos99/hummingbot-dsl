@@ -1,0 +1,186 @@
+strategy_model:
+  name: "RSIStrategy"
+  version: "1.0"
+  type: "DirectionalStrategyBase"
+  author: "Jane Doe"
+  author_email: "jane.doe@example.com"
+  description: "RSI-based trading strategy."
+  labels:
+    - "demo"
+    - "rsi"
+
+  exchanges:
+    - name: binance
+      apiKey: "your_binance_api_key"
+      apiSecret: "your_binance_api_secret"
+
+  trading_pairs:
+    pairs:
+      - name: "ETH-USDT"
+        base_asset: "ETH"
+        quote_asset: "USDT"
+        description: "Ethereum to Tether trading pair on Binance."
+      - name: "BTC-USDT"
+        base_asset: "BTC"
+        quote_asset: "USDT"
+        description: "Bitcoin to Tether trading pair on Binance."
+      - name: "ADA-USDT"
+        base_asset: "ADA"
+        quote_asset: "USDT"
+        description: "Cardano to Tether trading pair on Binance."
+
+
+  strategy_parameters:
+    - name: "rsi_threshold"
+      type: Decimal
+      description: "RSI indicator threshold for buy/sell signals"
+      prompt_msg: "Enter the RSI threshold"
+      default: 30
+      keyword: "rsi_threshold"
+      dynamic_reconfigure: false
+      prompt_on_new: true
+      range:
+        min: 0
+        max: 100
+
+  position_parameters:
+    - name: "stop_loss"
+      type: float
+      default: 0.0075
+      description: "Stop-loss percentage for the position."
+    - name: "take_profit"
+      type: float
+      default: 0.015
+      description: "Take-profit percentage for the position."
+    - name: "time_limit"
+      type: int
+      default: 60
+      description: "Time limit for the position in seconds."
+    - name: "trailing_stop_activation_delta"
+      type: float
+      default: 0.004
+      description: "Activation delta for the trailing stop."
+    - name: "trailing_stop_trailing_delta"
+      type: float
+      default: 0.001
+      description: "Trailing delta for the trailing stop."
+
+  position_executors:
+    description: "Configuration for managing multiple trading positions."
+    executors:
+      - name: "executor1"
+        max_executors: 1
+        position_mode: "HEDGE"
+        active_executors: [ ]
+        stored_executors: [ ]
+      - name: "executor2"
+        max_executors: 2
+        position_mode: "ONE-WAY"
+        active_executors: [ ]
+        stored_executors: [ ]
+
+
+  execution_logic:
+    entry_conditions:
+      - component: "RSIStrategyComponent"
+        condition: "<30"  # Enter when RSI is below 30
+    exit_conditions:
+      - component: "RSIStrategyComponent"
+        condition: ">70"  # Exit when RSI is above 70
+
+  candlestick_configuration:
+    description: "Configuration for candlestick data used in generating signals."
+    candles:
+      - component: "CandlesFactory"
+        config:
+          connector: "binance"
+          trading_pair: "ETH-USDT"
+          interval: "1m"
+          max_records: 1000
+
+  methods:
+    - name: "get_signal"
+      description: "Generate trading signal based on RSI indicator."
+      implementation: |
+        candles_df = self.get_processed_df()  # Replace with actual data source
+        rsi_value = candles_df.iat[-1, -1]  # Replace with actual RSI calculation
+        if rsi_value > 70:
+          return -1
+        elif rsi_value < 30:
+          return 1
+        else:
+          return 0
+    - name: "get_processed_df"
+      description: "Retrieves the processed dataframe with RSI values."
+      implementation: |
+        """
+        Retrieves the processed dataframe with RSI values.
+        Returns:
+            pd.DataFrame: The processed dataframe with RSI values.
+        """
+        candles_df = self.candles[0].candles_df
+        candles_df.ta.rsi(length=7, append=True)
+        return candles_df
+    - name: "market_data_extra_info"
+      description: "Provides additional information about the market data."
+      implementation: |
+        lines = []
+        columns_to_show = ["timestamp", "open", "low", "high", "close", "volume", "RSI_7"]
+        candles_df = self.get_processed_df()
+        lines.extend([f"Candles: {self.candles[0].name} | Interval: {self.candles[0].interval}\\n"])
+        lines.extend(self.candles_formatted_list(candles_df, columns_to_show))
+        return lines
+
+
+
+  indicators:
+    - name: RSI
+      config:
+        length: 14
+        overbought_threshold: 70
+        oversold_threshold: 30
+
+  order_types:
+    - market
+    - limit
+    - stop_limit:
+        stop_price: 500
+
+  strategy_conditions:
+    stop_loss:
+      description: "Stop Loss Condition"
+      threshold: 0.05  # 5% loss
+    take_profit:
+      description: "Take Profit Condition"
+      threshold: 0.1  # 10% profit
+    trailing_stop:
+      description: "Trailing Stop Condition"
+      activation_delta: 0.02  # Activate when profit reaches 2%
+      trailing_delta: 0.01  # Trail by 1%
+    time_based_exit:
+      description: "Time-Based Exit Condition"
+      time_limit_seconds: 3600  # 1 hour
+    volume_conditions:
+      description: "Volume Conditions"
+      min_volume: 1000000
+    volatility_conditions:
+      description: "Volatility Conditions"
+      min_volatility: 0.03  # 3% volatility
+    price_based_conditions:
+      description: "Price-Based Conditions"
+      support_level: 500.00
+      resistance_level: 550.00
+
+#  custom_methods:
+#    - name: "get_signal"
+#      description: "Generate trading signal based on RSI indicator."
+#      implementation: |
+#            candles_df = self.get_processed_df()  # Replace with actual data source
+#            rsi_value = candles_df.iat[-1, -1]  # Replace with actual RSI calculation
+#            if rsi_value > 70:
+#                return -1
+#            elif rsi_value < 30:
+#                return 1
+#            else:
+#                return 0
+#
